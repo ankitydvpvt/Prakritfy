@@ -11,9 +11,11 @@ export default function SplashScreen({ onFinish }) {
   }, [onFinish]);
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-r from-[#2F5F55] to-[#71D2BA]  
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-r from-[#2F5F55] to-[#71D2BA]  
       
-    ">
+    "
+    >
       <img
         src="/FinalLogo.png"
         alt="Splash"

@@ -1,32 +1,23 @@
-"use client"
+"use client";
 import emailjs from "emailjs-com";
 import { Button, Textarea, Portal } from "@chakra-ui/react";
 import { useState } from "react";
 
-export default function Form() {
-  const [open, setOpen] = useState(false);
-
+export default function Form({ open, setOpen }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    emailjs
-      .sendForm(
-        "SERVICE_ID",
-        "TEMPLATE_ID",
-        e.target,
-        "PUBLIC_KEY"
-      )
-      .then(
-        () => {
-          alert("Consultation request sent successfully!");
-          e.target.reset();
-          setOpen(false);
-        },
-        (error) => {
-          alert("Failed to send. Try again!");
-          console.error(error);
-        }
-      );
+    emailjs.sendForm("SERVICE_ID", "TEMPLATE_ID", e.target, "PUBLIC_KEY").then(
+      () => {
+        alert("Consultation request sent successfully!");
+        e.target.reset();
+        setOpen(false);
+      },
+      (error) => {
+        alert("Failed to send. Try again!");
+        console.error(error);
+      },
+    );
   };
 
   return (
@@ -70,108 +61,131 @@ export default function Form() {
         >
           {/* ===== FORM UI UNCHANGED ===== */}
 
-          <h2 className="text-xl font-semibold text-center">
+          <div className="text-xl font-bold text-center">
             <span className="text-lg font-bold">
               Book a Free <br />
               Consultation with Our <br />
               Doctors
             </span>
-          </h2>
+          </div>
 
           <p className="text-sm text-center text-gray-200 mt-2">
-            Kindly fill the required fields given below and complete to book your
-            free consultation.
+            Kindly fill the required fields given below and complete to book
+            your free consultation.
           </p>
 
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label className="text-sm font-medium">Full Name *</label>
-              <input
-                type="text"
-                
-                name="full_name"
-                placeholder="   Enter Your Name"
-                style={{
-    color: "black"
-  }}
-
-                required
-                className="w-full bg-white rounded-full mt-1 px-4 py-2 text-black outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium" >
-                Phone Number (Whatsapp) *
-              </label>
-              <div className="flex items-center bg-white rounded-full mt-1 px-3">
-                <span className="mr-2">🇮🇳</span>
-                <input
-  type="tel"
-  name="phone"
-  placeholder="Enter Your Number"
-  required
-  inputMode="numeric"
-  pattern="[0-9]*"
-  maxLength={10}
-  style={{
-    color: "black",
-    caretColor: "black",
-  }}
-  className="w-full py-2 text-black outline-none rounded-full"
-  onInput={(e) => {
-    e.target.value = e.target.value.replace(/[^0-9]/g, "");
-  }}
-/>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium">Email ID </label>
-              <input
-                type="email"
-                name="email"
-                placeholder="   Enter Your Email"
-                style={{
-    color: "black"
-  }}
-                textColor="black"
-                required
-                className="w-full bg-white rounded-full mt-1 px-4 py-2 text-black outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium">
-                Existing Health Conditions 
-              </label>
-              <Textarea
-                name="condition"
-                placeholder="Please Let as Know"
-                textColor="black"
-                rows={3}
-                required
-                w="full"
-                bg="white"
-                borderRadius="2xl"
-                color="black"
-                resize="none"
-                _focus={{ boxShadow: "none" }}
-              />
-            </div>
-
-            <Button
-              type="submit"
-              w="full"
-              bg="#2e4428"
-              color="white"
-              py={6}
-              borderRadius="full"
-              _hover={{ bg: "#e8d469", color: "black" }}
+          <div
+            className="
+          fixed bottom-4 right-4
+          w-[90%] sm:w-96
+          bg-[#026aa2]
+          rounded-2xl p-6
+          shadow-xl text-white
+        "
+            style={{
+              zIndex: 2999,
+              background:
+                "linear-gradient(135deg, rgba(2,106,162,0.9), rgba(0,40,80,0.9))",
+              transform: open
+                ? "translateY(0) scale(1)"
+                : "translateY(120%) scale(0.95)",
+              opacity: open ? 1 : 0,
+              transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)",
+              pointerEvents: open ? "auto" : "none",
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-3 right-4 text-xl "
             >
-              Book Free Consultation
-            </Button>
-          </form>
+              ✕
+            </button>
+
+            <div className="text-xl font-bold text-center">
+              Book a Free <br /> Consultation with Our Doctors
+            </div>
+
+            <p className="text-sm text-center text-gray-200 pt-2">
+              Fill the details below to book your free consultation.
+            </p>
+
+            <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+              {/* Full Name */}
+              <div>
+                <label className="text-sm font-medium">Full Name *</label>
+                <input
+                  type="text"
+                  name="full_name"
+                  required
+                  placeholder="   Enter your name"
+                  className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
+                />
+              </div>
+
+              {/* Phone Number */}
+              <div>
+                <label className="text-sm font-medium">
+                  Phone Number (WhatsApp) *
+                </label>
+                <div className="flex items-center bg-white rounded-full mt-1 px-3">
+                  <span className="mr-2 text-black">🇮🇳</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    required
+                    maxLength={10}
+                    placeholder="Enter number"
+                    inputMode="numeric"
+                    className="w-full py-3 text-black outline-none"
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="text-sm font-medium">Email ID</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="   Enter email"
+                  className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
+                />
+              </div>
+
+              {/* Health Condition */}
+              <div>
+                <label className="text-sm font-medium">
+                  Existing Health Conditions
+                </label>
+                <Textarea
+                  name="condition"
+                  rows={3}
+                  bg="white"
+                  color="black"
+                  borderRadius="xl"
+                  resize="none"
+                  _focus={{ boxShadow: "none" }}
+                />
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                w="full"
+                bg="#71D2BA"
+                color="white"
+                py={6}
+                borderRadius="full"
+                _hover={{ bg: "#e8d469", color: "black" }}
+              >
+                Book Free Consultation
+              </Button>
+            </form>
+          </div>
         </div>
       </Portal>
     </>

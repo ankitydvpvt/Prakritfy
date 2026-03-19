@@ -81,7 +81,6 @@ export default function PremiumContactPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#061411] via-[#0b2620] to-[#4fb9a0] text-white">
-
       {/* HEADER */}
       <section className="text-center py-20 px-4">
         <div className="text-5xl md:text-6xl font-semibold tracking-tight bg-gradient-to-r from-slate-100 to-cyan-200 bg-clip-text text-transparent">
@@ -94,7 +93,6 @@ export default function PremiumContactPage() {
 
       {/* CONTENT */}
       <section className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 pb-20">
-
         {/* LEFT INFO */}
         <div className="space-y-8">
           <div className="rounded-2xl overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
@@ -106,8 +104,12 @@ export default function PremiumContactPage() {
           </div>
 
           <div className="bg-white/[0.06] backdrop-blur-2xl border border-white/10 rounded-2xl p-8 space-y-6">
-            <Info icon={<FaPhone />} title="Phone" text="+1 (555) 123-HEALTH" />
-            <Info icon={<FaEnvelope />} title="Email" text="care@healthclinic.com" />
+            <Info icon={<FaPhone />} title="Phone" text="7058258025" />
+            <Info
+              icon={<FaEnvelope />}
+              title="Email"
+              text="care@prakritify.com"
+            />
             {/* <Info icon={<FaMapMarkerAlt />} title="Location" text="San Francisco, CA" /> */}
 
             {/* <div className="bg-cyan-500/10 border border-cyan-400/20 rounded-xl p-4">
@@ -123,7 +125,6 @@ export default function PremiumContactPage() {
 
         {/* FORM */}
         <div className="bg-white/[0.05] h-[90vh] backdrop-blur-2xl border border-white/10 rounded-2xl p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-
           <div className="text-3xl font-semibold mb-2">Book a Consultation</div>
           <div className="text-slate-400 mb-6">
             Our specialists will contact you shortly.
@@ -137,7 +138,6 @@ export default function PremiumContactPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-
             <Input
               label="Full Name"
               icon={<FaUser />}
@@ -157,7 +157,6 @@ export default function PremiumContactPage() {
             />
 
             <div className="grid grid-cols-2 gap-4 mb-10 mt-10">
-              
               <Input
                 type="date"
                 label="Preferred Date"
@@ -186,8 +185,6 @@ export default function PremiumContactPage() {
                   Evening
                 </option>
               </select>
-
-              
             </div>
 
             <textarea
@@ -199,7 +196,7 @@ export default function PremiumContactPage() {
               className="w-full bg-white/[0.04] border border-white/5 rounded-xl p-4 mt-50"
             />
 
-              <button
+            <button
               type="submit"
               disabled={isSubmitting}
               className={`w-full rounded-full py-4 text-lg font-semibold transition ${
@@ -209,19 +206,16 @@ export default function PremiumContactPage() {
               }`}
             >
               {isSubmitting ? (
-  <span className="relative z-10 flex items-center gap-3 text-emerald-100 tracking-wide">
-    <FaSpinner className="animate-spin text-lg opacity-90" />
-    <span className="font-medium">Processing</span>
-  </span>
-) : (
-  <span className="relative z-10 mt-10  flex justify-center transition-transform duration-300 hover:bg-white hover:text-black hover:scale-105 h-10 rounded-4xl bg-[#061512] items-center gap-3 tracking-wide">
-    <span className="font-semibold ">
-      Book Consultation
-    </span>
-    <FaArrowRight className="text-white/90 transition-transform duration-300 group-hover:translate-x-1" />
-  </span>
-)}
-
+                <span className="relative z-10 flex items-center gap-3 text-emerald-100 tracking-wide">
+                  <FaSpinner className="animate-spin text-lg opacity-90" />
+                  <span className="font-medium">Processing</span>
+                </span>
+              ) : (
+                <span className="relative z-10 mt-10  flex justify-center transition-transform duration-300 hover:bg-white hover:text-black hover:scale-105 h-10 rounded-4xl bg-[#061512] items-center gap-3 tracking-wide">
+                  <span className="font-semibold ">Book Consultation</span>
+                  <FaArrowRight className="text-white/90 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              )}
             </button>
           </form>
         </div>

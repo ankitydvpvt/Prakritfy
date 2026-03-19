@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { FiHeart } from "react-icons/fi";
-
+import { useState } from "react";
 import AnimatedImage from "@/components/home/AnimatedImage";
 import ValuePropositions from "@/components/home/ValuePropositions";
 import OurStory from "@/components/home/OurStory";
@@ -21,11 +21,13 @@ import Testimonials from "@/components/home/Testimonials";
 import BlogHighlights from "@/components/home/BlogHighlights";
 import CallToAction from "@/components/home/CallToAction";
 import VideosSection from "@/components/home/VideosSection";
-import Form from "@/components/home/Form";
+import Form from "../home/Form";
+
 
 const MotionBox = motion(Box);
 
 export default function Tree_section() {
+  const [open, setOpen] = useState(false);
   return (
     <Box position="relative" overflow="hidden">
       {/* ================= HERO ================= */}
@@ -37,34 +39,33 @@ export default function Tree_section() {
         pb={{ base: 20, md: 32 }}
       >
         {/* Background Image */}
-        <Box
-          position="absolute"
-          inset="0"
-          bgImage="url('/Wallpaper2.webp')"
+        {/* Background Image */}
 
-          bgSize="cover"
-          bgPosition="center"
-          bgRepeat="no-repeat"
-          filter="contrast(1.05) saturate(1.05)"
-          transform="scale(1.05)"
-          zIndex={0}
-        />
+{/* Background Image */}
+<Box
+  position="absolute"
+  inset="0"
+  bgImage="url('/Wallpaper2.webp')"
+  bgSize="cover"
+  bgPosition="center"
+  bgRepeat="no-repeat"
+  zIndex={0}
+/>
 
-        {/* Soft vignette */}
-        <Box
-          position="absolute"
-          inset="0"
-          bgGradient="radial-gradient(circle at center, rgba(0,0,0,0.05), rgba(0,0,0,0.35))"
-          zIndex={1}
-        />
+<Box
+  position="absolute"
+  inset="0"
+  bg="rgba(0,0,0,0.15)"   //  LIGHT (not dark)
+  zIndex={1}
+/>
 
-        {/* Light brand tint */}
-        <Box
-          position="absolute"
-          inset="0"
-          bg="rgba(0,142,124,0.22)"
-          zIndex={2}
-        />
+{/* Soft Brand Tint */}
+<Box
+  position="absolute"
+  inset="0"
+  bg="rgba(0,142,124,0.18)"  //  slightly reduced
+  zIndex={2}
+/>
 
         {/* Content */}
         <MotionBox
@@ -126,10 +127,14 @@ export default function Tree_section() {
                     transform: "translateY(-2px)",
                     boxShadow: "0 30px 80px rgba(0,0,0,0.55)",
                   }}
+                  onClick={() => setOpen(true)} // ✅ IMPORTANT
                 >
                   Book Consultation
                 </Button>
               </HStack>
+
+              {/* ✅ KEEP FORM OUTSIDE */}
+              <Form open={open} setOpen={setOpen} />
 
               <HStack
                 spacing={3}
@@ -150,14 +155,13 @@ export default function Tree_section() {
             </Stack>
 
             {/* RIGHT IMAGE */}
-
           </SimpleGrid>
         </MotionBox>
       </Box>
 
       {/* ================= FLOATING FORM ================= */}
 
-      <Form />
+      
 
       {/* ================= REST OF SITE ================= */}
       <Categories />

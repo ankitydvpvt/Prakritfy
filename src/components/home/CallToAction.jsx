@@ -1,6 +1,8 @@
 import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
-
+import Form from "../home/Form";
+import { useState } from "react";
 function CallToAction() {
+  const [open, setOpen] = useState(false);
   return (
     <Box py={{ base: 20, md: 28 }} bg="#f3e6d8">
       <Box maxW="1100px" mx="auto" px={{ base: 4, md: 8 }}>
@@ -43,9 +45,9 @@ function CallToAction() {
                 color="whiteAlpha.800"
                 lineHeight="1.7"
               >
-                Work 1:1 with our wellness team to identify root causes, interpret
-                health markers, and build a sustainable plan tailored to your
-                body and lifestyle.
+                Work 1:1 with our wellness team to identify root causes,
+                interpret health markers, and build a sustainable plan tailored
+                to your body and lifestyle.
               </Text>
             </Stack>
 
@@ -62,15 +64,18 @@ function CallToAction() {
                 color="#2F5F55"
                 fontWeight="600"
                 px={10}
-                _hover={{ bg: "#71d2ba" , color:"black" }}
+                _hover={{ bg: "#71d2ba", color: "black" }}
+                onClick={() => setOpen(true)}
               >
                 Book Consultation
               </Button>
+              <Form open={open} setOpen={setOpen} />
 
               <Button
                 size="lg"
                 variant="ghost"
                 color="whiteAlpha.800"
+                cursor="text"
                 fontWeight="500"
                 _hover={{ bg: "whiteAlpha.100" }}
               >

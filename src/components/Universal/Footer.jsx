@@ -1,6 +1,8 @@
 "use client";
 
 import NextLink from "next/link";
+import { useState } from "react";
+import Form from "../home/Form";
 import {
   Box,
   Button,
@@ -44,8 +46,9 @@ const socials = [
 ];
 
 export default function Footer() {
+  const [open, setOpen] = useState(false);
   return (
-    <Box as="footer" position="relative"  color="white">
+    <Box as="footer" position="relative" color="white">
       {/* TOP GLOW DIVIDER */}
       <Box
         position="absolute"
@@ -176,19 +179,6 @@ export default function Footer() {
               </Text>
 
               <Stack spacing={4}>
-                <Input
-                  type="tel"
-                  placeholder="Enter your number"
-                  rounded="full"
-                  bg="white"
-                  color="black"
-                  fontSize="sm"
-                  _placeholder={{ color: "gray.500" }}
-                  _focus={{
-                    boxShadow: "0 0 0 2px rgba(124,191,158,0.6)",
-                  }}
-                />
-
                 <Button
                   rounded="full"
                   bgGradient="linear(to-r, #7CBF9E, #548F9D)"
@@ -199,9 +189,11 @@ export default function Footer() {
                     transform: "translateY(-2px)",
                     boxShadow: "0 15px 40px rgba(124,191,158,0.6)",
                   }}
+                  onClick={() => setOpen(true)}
                 >
                   BOOK
                 </Button>
+                <Form open={open} setOpen={setOpen} />
               </Stack>
             </Box>
           </SimpleGrid>
@@ -224,13 +216,25 @@ export default function Footer() {
             </Text>
 
             <Stack direction={{ base: "column", md: "row" }} spacing={6}>
-              <Link as={NextLink} href="/contact#privacy" _hover={{ color: "#7CBF9E" }}>
+              <Link
+                as={NextLink}
+                href="/contact#privacy"
+                _hover={{ color: "#7CBF9E" }}
+              >
                 Privacy Policy
               </Link>
-              <Link as={NextLink} href="/contact#terms" _hover={{ color: "#7CBF9E" }}>
+              <Link
+                as={NextLink}
+                href="/contact#terms"
+                _hover={{ color: "#7CBF9E" }}
+              >
                 Terms of Service
               </Link>
-              <Link as={NextLink} href="/contact#faq" _hover={{ color: "#7CBF9E" }}>
+              <Link
+                as={NextLink}
+                href="/contact#faq"
+                _hover={{ color: "#7CBF9E" }}
+              >
                 FAQ
               </Link>
             </Stack>

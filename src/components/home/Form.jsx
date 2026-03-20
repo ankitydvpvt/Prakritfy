@@ -50,142 +50,116 @@ export default function Form({ open, setOpen }) {
       {/* ================= FORM (SLIDE + FADE) ================= */}
       <Portal>
         <div
-          className="w-80 bg-[#026aa2] rounded-2xl p-6 shadow-xl text-white fixed bottom-0 right-0"
-          style={{
-            zIndex: 2999,
-            transform: open ? "translateX(0)" : "translateX(120%)",
-            opacity: open ? 1 : 0,
-            transition: "transform 0.35s ease, opacity 0.35s ease",
-            pointerEvents: open ? "auto" : "none",
-          }}
-        >
-          {/* ===== FORM UI UNCHANGED ===== */}
-
-          <div className="text-xl font-bold text-center">
-            <span className="text-lg font-bold">
-              Book a Free <br />
-              Consultation with Our <br />
-              Doctors
-            </span>
-          </div>
-
-          <p className="text-sm text-center text-gray-200 mt-2">
-            Kindly fill the required fields given below and complete to book
-            your free consultation.
-          </p>
-
-          <div
-            className="
+          className="
           fixed bottom-4 right-4
           w-[90%] sm:w-96
           bg-[#026aa2]
           rounded-2xl p-6
           shadow-xl text-white
         "
-            style={{
-              zIndex: 2999,
-              background:
-                "linear-gradient(135deg, rgba(2,106,162,0.9), rgba(0,40,80,0.9))",
-              transform: open
-                ? "translateY(0) scale(1)"
-                : "translateY(120%) scale(0.95)",
-              opacity: open ? 1 : 0,
-              transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)",
-              pointerEvents: open ? "auto" : "none",
-            }}
+          style={{
+            zIndex: 2999,
+            background:
+              "linear-gradient(135deg, rgba(2,106,162,0.9), rgba(0,40,80,0.9))",
+            transform: open
+              ? "translateY(0) scale(1)"
+              : "translateY(120%) scale(0.95)",
+            opacity: open ? 1 : 0,
+            transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)",
+            pointerEvents: open ? "auto" : "none",
+          }}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setOpen(false)}
+            className="absolute top-3 right-4 text-xl "
           >
-            {/* Close Button */}
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-3 right-4 text-xl "
-            >
-              ✕
-            </button>
+            ✕
+          </button>
 
-            <div className="text-xl font-bold text-center">
-              Book a Free <br /> Consultation with Our Doctors
+          <div className="text-xl font-bold text-center">
+            Book a Free <br /> Consultation with Our Doctors
+          </div>
+
+          <p className="text-sm text-center text-gray-200 pt-2">
+            Fill the details below to book your free consultation.
+          </p>
+
+          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+            {/* Full Name */}
+            <div>
+              <label className="text-sm font-medium">Full Name *</label>
+              <input
+                type="text"
+                name="full_name"
+                required
+                placeholder="   Enter your name"
+                className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
+              />
             </div>
 
-            <p className="text-sm text-center text-gray-200 pt-2">
-              Fill the details below to book your free consultation.
-            </p>
-
-            <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-              {/* Full Name */}
-              <div>
-                <label className="text-sm font-medium">Full Name *</label>
+            {/* Phone Number */}
+            <div>
+              <label className="text-sm font-medium">
+                Phone Number (WhatsApp) *
+              </label>
+              <div className="flex items-center bg-white rounded-full mt-1 px-3">
+                <span className="mr-2 text-black">🇮🇳</span>
                 <input
-                  type="text"
-                  name="full_name"
+                  type="tel"
+                  name="phone"
                   required
-                  placeholder="   Enter your name"
-                  className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
+                  maxLength={10}
+                  placeholder="Enter number"
+                  inputMode="numeric"
+                  className="w-full py-3 text-black outline-none"
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                  }}
                 />
               </div>
+            </div>
 
-              {/* Phone Number */}
-              <div>
-                <label className="text-sm font-medium">
-                  Phone Number (WhatsApp) *
-                </label>
-                <div className="flex items-center bg-white rounded-full mt-1 px-3">
-                  <span className="mr-2 text-black">🇮🇳</span>
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    maxLength={10}
-                    placeholder="Enter number"
-                    inputMode="numeric"
-                    className="w-full py-3 text-black outline-none"
-                    onInput={(e) => {
-                      e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                    }}
-                  />
-                </div>
-              </div>
+            {/* Email */}
+            <div>
+              <label className="text-sm font-medium">Email ID</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="   Enter email"
+                className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
+              />
+            </div>
 
-              {/* Email */}
-              <div>
-                <label className="text-sm font-medium">Email ID</label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="   Enter email"
-                  className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
-                />
-              </div>
+            {/* Health Condition */}
+            <div>
+              <label className="text-sm font-medium">
+                Existing Health Conditions
+              </label>
+              <Textarea
+                name="condition"
+                rows={3}
+                bg="white"
+                color="black"
+                borderRadius="xl"
+                resize="none"
+                _focus={{ boxShadow: "none" }}
+              />
+            </div>
 
-              {/* Health Condition */}
-              <div>
-                <label className="text-sm font-medium">
-                  Existing Health Conditions
-                </label>
-                <Textarea
-                  name="condition"
-                  rows={3}
-                  bg="white"
-                  color="black"
-                  borderRadius="xl"
-                  resize="none"
-                  _focus={{ boxShadow: "none" }}
-                />
-              </div>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                w="full"
-                bg="#71D2BA"
-                color="white"
-                py={6}
-                borderRadius="full"
-                _hover={{ bg: "#e8d469", color: "black" }}
-              >
-                Book Free Consultation
-              </Button>
-            </form>
-          </div>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              w="full"
+              bg="#71D2BA"
+              color="white"
+              py={6}
+              borderRadius="full"
+              _hover={{ bg: "#e8d469", color: "black" }}
+            >
+              Book Free Consultation
+            </Button>
+          </form>
         </div>
       </Portal>
     </>

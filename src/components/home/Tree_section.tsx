@@ -45,7 +45,7 @@ export default function Tree_section() {
 <Box
   position="absolute"
   inset="0"
-  bgImage="url('/Wallpaper2.webp')"
+  bgImage="url('/Wallpsper3.jpeg')"
   bgSize="cover"
   bgPosition="center"
   bgRepeat="no-repeat"

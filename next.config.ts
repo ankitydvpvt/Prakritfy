@@ -3,10 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
 
-  // 🔽 REQUIRED for Netlify deploy without Git
-  output: "export",
+  // ✅ Required for Cloud Run
+  output: "standalone",
 
-  // 🔽 REQUIRED to avoid image errors
+  // Optional (keep if you want)
   images: {
     unoptimized: true,
   },

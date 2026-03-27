@@ -21,58 +21,48 @@ const testimonials = [
     role: "Owner · Therapy Center, Faridabad",
     quote:
       "Significant reduction in pain with Asthisudha Oil. Highly effective and reliable treatment.",
-    avatar: "https://i.pravatar.cc/150?img=5",
+
     rating: 5,
     condition: "Chronic Pain",
-    improvement: "85%",
   },
   {
     name: "Aditi Sharma",
     role: "Entrepreneur · PCOS program",
     quote:
       "Six weeks into the protocol, my cycles normalized and energy came rushing back. The constant support and habit nudges kept me on track.",
-    avatar: "https://i.pravatar.cc/150?img=47",
+
     rating: 5,
     condition: "PCOS",
-    improvement: "100%",
   },
   {
     name: "Rohit Menon",
     role: "Marathoner · Diabetes program",
     quote:
       "My sugar fluctuations reduced by 30% without losing training volume. The herbs pair seamlessly with my endurance nutrition.",
-    avatar: "https://i.pravatar.cc/150?img=12",
     rating: 5,
     condition: "Diabetes",
-    improvement: "30%",
   },
   {
     name: "Nisha Kapoor",
     role: "Creative director · Stress reset kit",
     quote:
       "The sleep elixir and breath protocols rewired my nervous system. I feel grounded, focused, and finally restful.",
-    avatar: "https://i.pravatar.cc/150?img=33",
     rating: 5,
     condition: "Stress Management",
-    improvement: "95%",
   },
   {
     name: "Karan Verma",
     role: "Fitness Coach",
     quote: "Amazing transformation in energy and digestion.",
-    avatar: "https://i.pravatar.cc/150?img=20",
     rating: 4,
     condition: "Digestive Health",
-    improvement: "70%",
   },
   {
     name: "Meera Joshi",
     role: "Working Professional",
     quote: "Stress reduced and sleep quality improved a lot.",
-    avatar: "https://i.pravatar.cc/150?img=25",
     rating: 5,
     condition: "Sleep & Stress",
-    improvement: "90%",
   },
 ];
 
@@ -103,19 +93,6 @@ function Testimonials() {
       <Box maxW="1200px" mx="auto" px={{ base: 4, md: 6 }}>
         {/* HEADER */}
         <Box textAlign="center" mb={16}>
-          <Badge
-            bg="#00796a"
-            color="white"
-            px={4}
-            py={2}
-            borderRadius="full"
-            fontSize="sm"
-            mb={4}
-            display="inline-block"
-          >
-            ⭐ Trusted by 500+ Happy Customers
-          </Badge>
-
           <Heading
             color="#00796a"
             fontSize={{ base: "2rem", md: "3rem", lg: "3.5rem" }}

@@ -16,43 +16,49 @@ const productCategories = [
     title: "Diabetes",
     description:
       "Balance blood sugar, enhance insulin sensitivity, and protect pancreatic function with targeted botanicals.",
-    },
-    {
-      img: "Lipids.avif",
-      title: "Lipids",
-      description:
-        "Manage cholesterol, reduce triglycerides, and boost metabolic resilience through evidence-led botanicals.",
-      },
-      {
-        img: "Blood_Pressure.jpg",
-        title: "Blood Pressure",
-        description:
-          "Stabilize blood pressure, improve circulation, and ease stress responses with adaptogenic formulations.",
-        },
-        {
-          img: "Heart.jpg",
-          title: "Heart Health",
-          description:
-            "Strengthen cardiac function, optimize lipids, and protect vascular integrity with cardiotonic herbs.",
-        },
-        {
-          img: "Arthritis.avif",
-          title: "Arthritis",
-          description:
-          "Relieve joint stiffness, support mobility, and promote long-term joint resilience with evidence-led botanicals.",
-        },
-        {
-          img: "Liver.jpg",
-          title: "Liver",
-          description:
-          "Detoxify, regenerate, and elevate liver performance with antioxidant-rich herbs and nutraceuticals.",
-        },
-        {
-          img: "PCOS.webp",
-          title: "PCOS",
-          description:
-            "Regulate cycles, support hormonal harmony, and reduce inflammation with clinically-backed Ayurvedic blends.",
-        },
+  },
+  {
+    img: "Lipids.avif",
+    title: "Lipids",
+    description:
+      "Manage cholesterol, reduce triglycerides, and boost metabolic resilience through evidence-led botanicals.",
+  },
+  {
+    img: "Blood_Pressure.jpg",
+    title: "Blood Pressure",
+    description:
+      "Stabilize blood pressure, improve circulation, and ease stress responses with adaptogenic formulations.",
+  },
+  {
+    img: "Heart.jpg",
+    title: "Heart Health",
+    description:
+      "Strengthen cardiac function, optimize lipids, and protect vascular integrity with cardiotonic herbs.",
+  },
+  {
+    img: "Bone.png",
+    title: " Bone/Joint/Nerve Health",
+    description:
+      "Support bone strength, improve joint flexibility, and promote nerve health for better mobility and overall wellness.",
+  },
+  {
+    img: "Gut.webp",
+    title: "Gut Health",
+    description:
+      "Support healthy digestion, improve gut balance, and enhance nutrient absorption with natural, targeted botanicals.",
+  },
+  {
+    img: "Liver.jpg",
+    title: "Liver",
+    description:
+      "Detoxify, regenerate, and elevate liver performance with antioxidant-rich herbs and nutraceuticals.",
+  },
+  {
+    img: "PCOS.webp",
+    title: "PCOS",
+    description:
+      "Regulate cycles, support hormonal harmony, and reduce inflammation with clinically-backed Ayurvedic blends.",
+  },
 ];
 
 function Categories() {
@@ -87,12 +93,7 @@ function Categories() {
             backed by potent herbology
           </Heading>
 
-          <Text
-            maxW="620px"
-            mx="auto"
-            color="#4A6F6A"
-            fontSize="lg"
-          >
+          <Text maxW="620px" mx="auto" color="#4A6F6A" fontSize="lg">
             Every condition is supported by clinically validated herbal stacks,
             nutrition roadmaps, and lifestyle coaching to address root causes.
           </Text>

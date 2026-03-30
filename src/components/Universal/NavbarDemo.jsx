@@ -21,6 +21,8 @@ export function NavbarDemo() {
     { name: "About", link: "/about" },
     { name: "Contact", link: "/contact" },
     { name: "Product", link: "/product" },
+
+    { name: "Patient Inquiry", link: "/patient-conditions-inquiry" },
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

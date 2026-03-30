@@ -21,8 +21,7 @@ export const metadata: Metadata = {
   description: "Chronic Disease Management Through Functional Medicine",
 
   icons: {
-    icon: [
-      { url: "/favicon.ico" },],
+    icon: [{ url: "/favicon.ico" }],
     apple: "/apple-touch-icon.png",
   },
 
@@ -36,7 +35,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

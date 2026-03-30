@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 
+// Use Render production API only
 const BASE_URL = "https://nutribot-backend-9e3a.onrender.com";
 
 const diseaseQuestions: Record<string, any[]> = {
@@ -10,19 +11,19 @@ const diseaseQuestions: Record<string, any[]> = {
       id: "fasting_sugar",
       question: "Fasting sugar level (mg/dL)",
       type: "text",
-      placeholder: "Enter value or 'n'",
+      placeholder: "Enter value ",
     },
     {
       id: "postmeal_sugar",
       question: "Post-meal sugar level (mg/dL)",
       type: "text",
-      placeholder: "Enter value or 'n'",
+      placeholder: "Enter value ",
     },
     {
       id: "hba1c",
       question: "HbA1c level",
       type: "text",
-      placeholder: "Enter value or 'n'",
+      placeholder: "Enter value ",
     },
     {
       id: "diabetes_medication",
@@ -36,13 +37,13 @@ const diseaseQuestions: Record<string, any[]> = {
       id: "systolic_bp",
       question: "Systolic BP (upper value)",
       type: "text",
-      placeholder: "Enter value or 'n'",
+      placeholder: "Enter value ",
     },
     {
       id: "diastolic_bp",
       question: "Diastolic BP (lower value)",
       type: "text",
-      placeholder: "Enter value or 'n'",
+      placeholder: "Enter value ",
     },
     {
       id: "bp_medication",
@@ -56,7 +57,7 @@ const diseaseQuestions: Record<string, any[]> = {
       id: "total_cholesterol",
       question: "Total cholesterol level",
       type: "text",
-      placeholder: "Enter value or 'n'",
+      placeholder: "Enter value ",
     },
   ],
   thyroid: [
@@ -64,7 +65,7 @@ const diseaseQuestions: Record<string, any[]> = {
       id: "tsh_level",
       question: "TSH level",
       type: "text",
-      placeholder: "Enter value or 'n'",
+      placeholder: "Enter value ",
     },
     {
       id: "thyroid_type",
@@ -184,7 +185,7 @@ export default function SimpleForm() {
   useEffect(() => {
     const wake = async () => {
       try {
-        await fetch(`${BASE_URL}/api/patient/all?page=1&limit=1`);
+        await fetch(`${BASE_URL}/api/questionnaire/all?page=1&limit=1`);
         setBackendReady(true);
       } catch {
         setBackendReady(true); // still let user try even if ping fails
@@ -272,61 +273,140 @@ export default function SimpleForm() {
     if (!form.name.trim()) return showToast("Full name is required.", "warn");
     if (!form.phone.trim())
       return showToast("Phone number is required.", "warn");
-    if (!form.email.trim()) return showToast("Email is required.", "warn");
+    if (!form.email.trim())
+      return showToast("Email address is required.", "warn");
     if (!form.age) return showToast("Age is required.", "warn");
-    if (!form.gender) return showToast("Gender is required.", "warn");
+    if (!form.gender) return showToast("Please select a gender.", "warn");
     if (!form.weight.trim()) return showToast("Weight is required.", "warn");
 
     setIsSubmitting(true);
 
     try {
+      // Map question IDs to proper schema field names
+      const fieldMapping: Record<string, Record<string, string>> = {
+        diabetes: {
+          fasting_sugar: "fastingSugar",
+          postmeal_sugar: "postMealSugar",
+          hba1c: "hba1c",
+          diabetes_medication: "medication",
+        },
+        blood_pressure: {
+          systolic_bp: "systolic",
+          diastolic_bp: "diastolic",
+          bp_medication: "medication",
+        },
+        cholesterol: {
+          total_cholesterol: "totalCholesterol",
+        },
+        thyroid: {
+          tsh_level: "tsh",
+          thyroid_type: "thyroidType",
+        },
+        heart_health: {
+          heart_diagnosis: "diagnosed",
+        },
+        pcos: {
+          menstrual_cycle: "cycleRegular",
+        },
+        liver_issues: {
+          fatty_liver: "fattyLiver",
+        },
+        arthritis: {
+          pain_issue: "issue",
+        },
+      };
+
+      // Build conditions object with proper field names
+      const conditions: Record<string, any> = {};
+      Object.entries(form.conditionDetails).forEach(([disease, details]) => {
+        const schemaDiseaseName =
+          disease === "blood_pressure"
+            ? "bloodPressure"
+            : disease === "heart_health"
+              ? "heartHealth"
+              : disease === "liver_issues"
+                ? "liverIssues"
+                : disease === "arthritis"
+                  ? "arthritisJointPain"
+                  : disease === "cholesterol"
+                    ? "cholesterolLipids"
+                    : disease;
+
+        const mapping = fieldMapping[disease] || {};
+        const conditionData: Record<string, any> = {};
+
+        Object.entries(details).forEach(([qId, val]) => {
+          const fieldName = mapping[qId] || qId;
+          const strVal = String(val ?? "").trim();
+
+          // Convert values
+          if (strVal === "" || strVal.toLowerCase() === "n") {
+            conditionData[fieldName] = null;
+          } else if (
+            fieldName === "medication" ||
+            fieldName === "cycleRegular" ||
+            fieldName === "diagnosed" ||
+            fieldName === "fattyLiver"
+          ) {
+            // Boolean fields
+            conditionData[fieldName] = strVal.toLowerCase() === "yes";
+          } else if (
+            fieldName === "fastingSugar" ||
+            fieldName === "postMealSugar" ||
+            fieldName === "hba1c" ||
+            fieldName === "totalCholesterol" ||
+            fieldName === "systolic" ||
+            fieldName === "diastolic" ||
+            fieldName === "tsh"
+          ) {
+            // Numeric fields
+            conditionData[fieldName] = parseFloat(strVal) || null;
+          } else {
+            // String fields
+            conditionData[fieldName] = strVal || null;
+          }
+        });
+
+        conditions[schemaDiseaseName] = conditionData;
+      });
+
+      // height: number if parseable, else omit entirely
       const heightNum = parseFloat(form.height);
 
       const payload = {
+        phoneNumber: form.phone.trim(),
+        email: form.email.trim(),
         name: form.name.trim(),
-        phone: form.phone.trim(),
-        age: Number(form.age),
-        gender: form.gender,
-        height: parseFloat(form.height) || undefined,
-        weight: parseFloat(form.weight),
-        diseases: form.diseases.map((d) => diseaseDisplayNames[d]),
-
-        answers: Object.entries(form.conditionDetails).flatMap(
-          ([disease, details]) =>
-            Object.entries(details).map(([qId, val]) => ({
-              disease: diseaseDisplayNames[disease],
-              questionId: qId,
-              answer:
-                String(val ?? "")
-                  .trim()
-                  .toLowerCase() === "n"
-                  ? "n"
-                  : val,
-            })),
-        ),
+        selectedConditions: form.diseases,
+        responses: {
+          gender: form.gender.toLowerCase(),
+          age: Number(form.age),
+          weightKg: parseFloat(form.weight),
+          ...(Number.isFinite(heightNum) ? { heightCm: heightNum } : {}),
+          ...(form.diseases.length > 0 ? { conditions } : {}),
+        },
       };
 
-      console.log("🚀 Sending:", payload);
+      console.log("Submitting payload:", JSON.stringify(payload, null, 2));
 
-      const res = await fetchWithRetry(`${BASE_URL}/api/patient/create`, {
+      const res = await fetch(`${BASE_URL}/api/questionnaire/create`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      // 🔥 FIX 1: check response before parsing
+      const data = await res.json();
+      console.log("API response:", data);
+
       if (!res.ok) {
-        const text = await res.text(); // safer than res.json()
-        throw new Error(text || "API failed");
+        const detail = Array.isArray(data?.details)
+          ? data.details.join("\n")
+          : (data?.error ?? "Submission failed.");
+        throw new Error(detail);
       }
 
-      const data = await res.json();
-
-      console.log("✅ Success:", data);
-
-      showToast("Form submitted successfully!", "success");
+      showToast("✅ Submitted successfully!", "success");
+      console.log("Inquiry ID:", data?.data?.inquiryId);
 
       // reset form
       setForm({
@@ -350,7 +430,10 @@ export default function SimpleForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#71d2ba] via-[#468374] to-[#2c5a4f] py-8 px-4">
+    <div
+      className="min-h-screen bg-gradient-to-br from-[#71d2ba] via-[#468374] to-[#2c5a4f] py-8 px-4"
+      suppressHydrationWarning
+    >
       {toast && (
         <Toast
           msg={toast.msg}
@@ -475,7 +558,7 @@ export default function SimpleForm() {
                               e.target.value,
                             )
                           }
-                          className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
+                          className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
                         >
                           <option value="">-- Select --</option>
                           {q.options?.map((opt: string) => (
@@ -525,7 +608,7 @@ export default function SimpleForm() {
                             )
                           }
                           placeholder={q.placeholder}
-                          className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white placeholder-gray-400"
+                          className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400"
                         />
                       )}
                     </div>
@@ -552,7 +635,7 @@ export default function SimpleForm() {
                     onChange={handleChange}
                     placeholder="Enter your full name"
                     required
-                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
                   />
                 </div>
 
@@ -570,7 +653,7 @@ export default function SimpleForm() {
                     required
                     min={1}
                     max={120}
-                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
                   />
                 </div>
 
@@ -612,7 +695,7 @@ export default function SimpleForm() {
                     placeholder="Enter your weight"
                     required
                     min={1}
-                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
                   />
                 </div>
 
@@ -627,7 +710,7 @@ export default function SimpleForm() {
                     value={form.height}
                     onChange={handleChange}
                     placeholder="Enter height or 'n'"
-                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
                   />
                   <div className="text-xs text-gray-400 mt-1">
                     Enter 'n' if not known
@@ -646,7 +729,7 @@ export default function SimpleForm() {
                     onChange={handleChange}
                     placeholder="e.g. 923001234567"
                     required
-                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
                   />
                 </div>
 
@@ -662,7 +745,7 @@ export default function SimpleForm() {
                     onChange={handleChange}
                     placeholder="you@example.com"
                     required
-                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-[#535353] text-white placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
+                    className="w-full p-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:border-[#468374] focus:ring-1 focus:ring-[#71d2ba]"
                   />
                   <div className="text-xs text-gray-400 mt-1">
                     Required — used for updates

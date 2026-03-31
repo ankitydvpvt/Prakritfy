@@ -1,695 +1,511 @@
 "use client";
-
-import { useState, useMemo } from "react";
+import { useState, useMemo, MouseEvent } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { NavbarDemo } from "@/components/Universal/NavbarDemo";
-import ProductSearch from "@/components/search/ProductSearch";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { Star, ShoppingBag, Heart, Eye, Shield, Truck, RefreshCw, X } from "lucide-react";
+import {
+  Star,
+  ShoppingBag,
+  Heart,
+  X,
+  Sparkles,
+  Search,
+  ArrowRight,
+  Clock,
+  ShieldCheck,
+  Leaf,
+  ArrowUpDown,
+  Plus,
+  ArrowDown,
+} from "lucide-react";
+import Footer from "@/components/Universal/Footer";
 
-export default function ProductPage() {
-  const products = [
-    {
-      id: 1,
-      image: "/Product1.jpeg",
-      name: "Shilajit Gold Resin",
-      mrp: 1999,
-      rating: 4.4,
-      reviews: 2341,
-      badge: "Bestseller",
-      origin: "Himalayan Gold",
-      benefits: ["Immunity", "Energy", "Longevity"],
-      inStock: true
-    },
-    {
-      id: 2,
-      image: "/Product2.jpeg",
-      name: "Himalayan Shilajit",
-      mrp: 1599,
-      rating: 4.2,
-      reviews: 1820,
-      badge: "Premium",
-      origin: "Nepal Himalayas",
-      benefits: ["Vitality", "Strength", "Recovery"],
-      inStock: true
-    },
-    {
-      id: 3,
-      image: "/Product3.jpeg",
-      name: "Herbal Juice",
-      mrp: 1499,
-      rating: 4.1,
-      reviews: 980,
-      badge: "New",
-      origin: "Organic Valley",
-      benefits: ["Detox", "Wellness", "Glow"],
-      inStock: true
-    },
-    {
-      id: 4,
-      image: "/Product4.jpeg",
-      name: "Wellness Capsule",
-      mrp: 1299,
-      rating: 4.3,
-      reviews: 1210,
-      badge: "Popular",
-      origin: "Ayurvedic Formula",
-      benefits: ["Daily Wellness", "Balance", "Immunity"],
-      inStock: false
-    },
-    {
-      id: 5,
-      image: "/Product5.jpeg",
-      name: "Ayurvedic Oil",
-      mrp: 1399,
-      rating: 4.0,
-      reviews: 760,
-      badge: "Therapy",
-      origin: "Kerala Tradition",
-      benefits: ["Pain Relief", "Flexibility", "Rejuvenation"],
-      inStock: true
-    },
-    {
-      id: 6,
-      image: "/Product6.jpeg",
-      name: "Health Tonic",
-      mrp: 1099,
-      rating: 4.5,
-      reviews: 3120,
-      badge: "Top Rated",
-      origin: "Himalayan Herbs",
-      benefits: ["Strength", "Immunity", "Stamina"],
-      inStock: true
-    },
-  ];
+const PRODUCTS = [
+  {
+    id: 1,
+    image: "/Product1.jpeg",
+    name: "C Cure Immunity",
+    mrp: 1999,
+    rating: 4.8,
+    reviews: 2341,
+    badge: "Bestseller",
+    origin: "Himalayan Gold",
+    benefits: ["Immunity", "Energy", "Longevity"],
+    description:
+      "A premium wellness formula designed to boost immunity, increase energy levels, and support long-term health and vitality using rare Himalayan extracts.",
+    ingredients: ["Shilajit Extract", "Gold Bhasma", "Ashwagandha", "Gokshura"],
+    usage: "Take 1-2 grams twice daily with warm milk or water.",
+  },
+  {
+    id: 2,
+    image: "/Product2.jpeg",
+    name: "Diabetic Balance",
+    mrp: 1599,
+    rating: 4.6,
+    reviews: 1820,
+    badge: "Premium",
+    origin: "Nepal Himalayas",
+    benefits: ["Vitality", "Strength", "Recovery"],
+    description:
+      "Specially formulated to help manage blood sugar levels while supporting overall vitality, strength, and recovery through pure Shilajit resin.",
+    ingredients: [
+      "Pure Shilajit Resin",
+      "Fulvic Acid",
+      "Humic Acid",
+      "Trace Minerals",
+    ],
+    usage:
+      "Dissolve a pea-sized amount in warm water or milk. Consume twice daily.",
+  },
+  {
+    id: 3,
+    image: "/Product3.jpeg",
+    name: "Herbal Glow Juice",
+    mrp: 1499,
+    rating: 4.7,
+    reviews: 980,
+    badge: "New",
+    origin: "Organic Valley",
+    benefits: ["Detox", "Wellness", "Glow"],
+    description:
+      "A natural blend of organic ingredients that helps detoxify the body, improve wellness, and enhance skin glow from within.",
+    ingredients: ["Aloe Vera", "Wheatgrass", "Amla", "Tulsi", "Ginger"],
+    usage: "Take 30ml twice daily before meals.",
+  },
+  {
+    id: 4,
+    image: "/Product4.jpeg",
+    name: "Asthisudha Fortis",
+    mrp: 1299,
+    rating: 4.5,
+    reviews: 1210,
+    badge: "Popular",
+    origin: "Ayurvedic Formula",
+    benefits: ["Daily Wellness", "Balance", "Immunity"],
+    description:
+      "An Ayurvedic supplement formulated to support daily wellness, maintain body balance, and strengthen immunity naturally.",
+    ingredients: ["Ashwagandha", "Tulsi", "Giloy", "Turmeric", "Ginger"],
+    usage: "Take 2 capsules twice daily after meals.",
+  },
+  {
+    id: 5,
+    image: "/Product5.jpeg",
+    name: "Pure Whey Protein",
+    mrp: 1399,
+    rating: 4.9,
+    reviews: 760,
+    badge: "Therapy",
+    origin: "Kerala Tradition",
+    benefits: ["Muscle Growth", "Recovery", "Strength"],
+    description:
+      "High-quality protein supplement that supports muscle growth, recovery, and overall strength with essential amino acids.",
+    ingredients: [
+      "Whey Protein Concentrate",
+      "Essential Amino Acids",
+      "Digestive Enzymes",
+    ],
+    usage: "Mix one scoop with water or milk and consume after workouts.",
+  },
+  {
+    id: 6,
+    image: "/Product6.jpeg",
+    name: "AAmeagraa Vital",
+    mrp: 1099,
+    rating: 4.7,
+    reviews: 3120,
+    badge: "Top Rated",
+    origin: "Himalayan Herbs",
+    benefits: ["Strength", "Immunity", "Stamina"],
+    description:
+      "A powerful herbal tonic designed to enhance stamina, improve strength, and boost overall immunity using traditional herbs.",
+    ingredients: ["Ashwagandha", "Shatavari", "Ginseng", "Brahmi", "Licorice"],
+    usage: "Mix 10-15ml with water. Consume twice daily.",
+  },
+];
 
-  // State management
+export default function App() {
   const [search, setSearch] = useState("");
-  const [wishlist, setWishlist] = useState<number[]>([]);
-  const [cart, setCart] = useState<number[]>([]);
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedProduct, setSelectedProduct] = useState<
+    (typeof PRODUCTS)[0] | null
+  >(null);
   const [sortBy, setSortBy] = useState("featured");
-  const [showQuickView, setShowQuickView] = useState<number | null>(null);
-  const [notification, setNotification] = useState<{show: boolean; message: string; type: 'success' | 'error'}>({
-    show: false,
-    message: '',
-    type: 'success'
-  });
+  const [wishlist, setWishlist] = useState<number[]>([]);
 
-  // Filter and sort products
   const filteredProducts = useMemo(() => {
-    let filtered = products.filter((p) =>
-      p.name.toLowerCase().includes(search.trim().toLowerCase())
+    let filtered = PRODUCTS.filter((p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()),
     );
-
-    // Apply sorting
-    switch (sortBy) {
-      case "price-low":
-        filtered.sort((a, b) => a.mrp - b.mrp);
-        break;
-      case "price-high":
-        filtered.sort((a, b) => b.mrp - a.mrp);
-        break;
-      case "rating":
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      default:
-        // featured - keep original order
-        break;
-    }
-
+    if (sortBy === "price-low") filtered.sort((a, b) => a.mrp - b.mrp);
+    if (sortBy === "price-high") filtered.sort((a, b) => b.mrp - a.mrp);
+    if (sortBy === "rating") filtered.sort((a, b) => b.rating - a.rating);
     return filtered;
   }, [search, sortBy]);
 
-  // Wishlist functions
-  const toggleWishlist = (id: number, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    setWishlist(prev => {
-      const newWishlist = prev.includes(id) 
-        ? prev.filter(item => item !== id) 
-        : [...prev, id];
-      
-      showNotification(
-        prev.includes(id) ? "Removed from wishlist" : "Added to wishlist",
-        "success"
-      );
-      
-      return newWishlist;
-    });
+  const toggleWishlist = (id: number, e: MouseEvent) => {
+    e.stopPropagation();
+    setWishlist((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
   };
-
-  // Cart functions
-  const addToCart = (id: number, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    const product = products.find(p => p.id === id);
-    
-    if (!product?.inStock) {
-      showNotification("Product is out of stock", "error");
-      return;
-    }
-
-    setCart(prev => {
-      if (!prev.includes(id)) {
-        showNotification("Added to cart successfully", "success");
-        return [...prev, id];
-      } else {
-        showNotification("Item already in cart", "error");
-        return prev;
-      }
-    });
-  };
-
-  // Notification function
-  const showNotification = (message: string, type: 'success' | 'error') => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => {
-      setNotification(prev => ({ ...prev, show: false }));
-    }, 3000);
-  };
-
-  // Quick view function
-  const quickView = (id: number, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    setShowQuickView(id);
-  };
-
-  // Clear search
-  const clearSearch = () => {
-    setSearch("");
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants: Variants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring" as const,
-      stiffness: 100,
-      damping: 12,
-    },
-  },
-};
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f0f0f0' }}>
-      {/* Navbar */}
-      <div style={{ backgroundColor: '#71d2ba' }}>
-        <NavbarDemo />
-      </div>
-
-      {/* Notification Toast */}
-      <AnimatePresence>
-        {notification.show && (
-          <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            className={`fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${
-              notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            } text-white`}
-          >
-            {notification.message}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Quick View Modal */}
-      <AnimatePresence>
-        {showQuickView && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-            onClick={() => setShowQuickView(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {products.find(p => p.id === showQuickView) && (
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="text-2xl font-serif font-bold text-gray-900">
-                      {products.find(p => p.id === showQuickView)?.name}
-                    </div>
-                    <button
-                      onClick={() => setShowQuickView(null)}
-                      className="p-2 hover:bg-gray-100 rounded-full transition"
-                    >
-                      <X size={20} />
-                    </button>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <img
-                        src={products.find(p => p.id === showQuickView)?.image}
-                        alt="Product"
-                        className="w-full h-64 object-contain"
-                      />
-                    </div>
-                    
-                    <div>
-                      <div className="mb-4">
-                        <span className="text-sm text-orange-600 font-semibold">
-                          {products.find(p => p.id === showQuickView)?.origin}
-                        </span>
-                        <div className="flex items-center gap-2 mt-2">
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                size={16}
-                                className={`${
-                                  i < Math.floor(products.find(p => p.id === showQuickView)?.rating || 0)
-                                    ? "fill-yellow-400 stroke-yellow-400"
-                                    : "stroke-gray-300"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-sm text-gray-600">
-                            ({products.find(p => p.id === showQuickView)?.reviews.toLocaleString()} reviews)
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="mb-4">
-                        <span className="text-3xl font-bold text-gray-900">
-                          ₹{products.find(p => p.id === showQuickView)?.mrp.toLocaleString()}
-                        </span>
-                      </div>
-
-                      <div className="mb-4">
-                        <div className="font-semibold mb-2">Benefits:</div>
-                        <div className="flex flex-wrap gap-2">
-                          {products.find(p => p.id === showQuickView)?.benefits.map((benefit, index) => (
-                            <span
-                              key={index}
-                              className="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm"
-                            >
-                              {benefit}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mb-4">
-                        <span className={`text-sm font-semibold ${
-                          products.find(p => p.id === showQuickView)?.inStock 
-                            ? 'text-green-600' 
-                            : 'text-red-600'
-                        }`}>
-                          {products.find(p => p.id === showQuickView)?.inStock 
-                            ? '✓ In Stock' 
-                            : '✗ Out of Stock'}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <button
-                          onClick={() => {
-                            addToCart(showQuickView);
-                            setShowQuickView(null);
-                          }}
-                          disabled={!products.find(p => p.id === showQuickView)?.inStock}
-                          className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          Add to Cart
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            toggleWishlist(showQuickView, e);
-                          }}
-                          className="p-3 border-2 border-gray-200 hover:border-orange-500 rounded-xl transition"
-                        >
-                          <Heart
-                            size={20}
-                            className={`${
-                              wishlist.includes(showQuickView)
-                                ? "fill-red-500 stroke-red-500"
-                                : "stroke-gray-600"
-                            }`}
-                          />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="min-h-screen selection:bg-brand-accent/30 bg-[#f6cf81]">
+      <NavbarDemo />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden" style={{ backgroundColor: '#71d2ba' }}>
-        <div className="absolute inset-0 bg-black/5" />
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <div className="text-4xl md:text-5xl font-serif font-bold text-white">
-              Pure • Natural • Authentic
-            </div>
-            <p className="mt-4 text-lg text-white/90 max-w-2xl mx-auto">
-              Discover our curated collection of premium wellness products, 
-              sourced from the pristine Himalayas and crafted with ancient wisdom.
-            </p>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Search and Filters Section */}
-        <div className="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-gray-500">Sort by:</span>
-            <select 
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#71d2ba] focus:border-transparent"
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="rating">Top Rated</option>
-            </select>
-            
-            <div className="flex border border-gray-200 rounded-lg overflow-hidden ml-4">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`px-3 py-2 transition ${
-                  viewMode === "grid" 
-                    ? "bg-[#71d2ba] text-white" 
-                    : "bg-white text-gray-600 hover:bg-gray-50"
-                }`}
+              <div className="flex items-center gap-2 text-green font-semibold tracking-widest uppercase text-xs mb-6">
+                <Sparkles size={14} />
+                <span>Ancient Wisdom, Modern Science</span>
+              </div>
+              <div className="text-6xl md:text-8xl font-serif font-bold leading-[0.9] mb-8 text-brand-primary">
+                Purity from the{" "}
+                <span className="italic text-brand-secondary">Nature</span>
+              </div>
+              <div className="text-lg text-brand-primary/60 max-w-lg mb-10 leading-relaxed">
+                Experience the transformative power of nature with our curated
+                collection of authentic, lab-tested wellness essentials.
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <div className="px-8 py-4 bg-brand-primary text-white rounded-full font-medium hover:bg-brand-secondary transition-all flex items-center gap-2 group">
+                  Explore Collection
+                  <ArrowDown
+                    size={18}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="relative aspect-square lg:aspect-auto lg:h-[600px] rounded-[40px] overflow-hidden shadow-2xl"
+            >
+              <img
+                src="https://picsum.photos/seed/himalayas/1200/1600"
+                alt="Himalayan landscape"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/40 to-transparent" />
+              <div className="absolute bottom-8 left-8 right-8 glass p-6 rounded-2xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-widest text-brand-primary/40 mb-1">
+                      Featured Origin
+                    </div>
+                    <div className="text-xl font-serif font-bold text-brand-primary">
+                      Uttarakhand, India
+                    </div>
+                  </div>
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="w-10 h-10 rounded-full border-2 border-white overflow-hidden"
+                      >
+                        <img
+                          src={`https://i.pravatar.cc/100?img=${i + 10}`}
+                          alt="User"
+                        />
+                      </div>
+                    ))}
+                    <div className="w-10 h-10 rounded-full border-2 border-white bg-brand-accent flex items-center justify-center text-[10px] font-bold text-white">
+                      +2k
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Filter & Search Bar */}
+      <section className="sticky top-24 z-40 px-6 mb-12">
+        <div className="max-w-7xl mx-auto glass rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 shadow-lg">
+          <div className="relative flex-1 w-full">
+            <input
+              type="text"
+              placeholder="     Search Here"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-brand-primary/5 rounded-xl border-none focus:ring-2 focus:ring-brand-accent/20 outline-none text-brand-primary placeholder:text-brand-primary/30"
+            />
+          </div>
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="flex items-center gap-2 bg-brand-primary/5 px-4 py-3 rounded-xl border border-brand-primary/10">
+              <ArrowUpDown size={18} className="text-brand-primary/40" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-transparent text-sm font-medium outline-none cursor-pointer text-brand-primary"
               >
-                ⊞
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={`px-3 py-2 transition ${
-                  viewMode === "list" 
-                    ? "bg-[#71d2ba] text-white" 
-                    : "bg-white text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                ☰
-              </button>
+                <option value="featured">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Top Rated</option>
+              </select>
             </div>
           </div>
-          
-          <ProductSearch onSearch={setSearch} />
         </div>
+      </section>
 
-        {/* Results Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <div className="text-2xl font-serif text-gray-900">
-            {search ? (
-              <>
-                <span className="text-gray-500">Search results for</span>{" "}
-                <span className="text-[#71d2ba] border-b-2 border-[#71d2ba]/20 pb-1">
-                  "{search}"
-                </span>
-              </>
-            ) : (
-              "Our Premium Collection"
-            )}
-          </div>
-          <span className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200">
-            {filteredProducts.length} products
-          </span>
-        </div>
-
-        {/* Product Grid/List */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className={`${
-            viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              : "space-y-4"
-          }`}
-        >
-          <AnimatePresence>
-            {filteredProducts.map((product) => (
-              <motion.div
-                key={product.id}
-                variants={itemVariants}
-                layout
-                exit={{ opacity: 0, scale: 0.9 }}
-                className={`group relative bg-white rounded-2xl ${
-                  viewMode === "grid"
-                    ? "shadow-lg hover:shadow-2xl"
-                    : "flex gap-6 shadow-md hover:shadow-xl"
-                } overflow-hidden transition-all duration-500 hover:-translate-y-1`}
-                onHoverStart={() => setHoveredId(product.id)}
-                onHoverEnd={() => setHoveredId(null)}
-              >
-                {/* Badge */}
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="px-3 py-1 bg-gradient-to-r from-[#71d2ba] to-[#5fb8a0] text-white text-xs font-semibold rounded-full shadow-lg">
-                    {product.badge}
-                  </span>
-                </div>
-
-                {/* Wishlist Button */}
-                <button
-                  onClick={(e) => toggleWishlist(product.id, e)}
-                  className="absolute top-4 right-4 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
+      {/* Product Grid */}
+      <section className="px-6 pb-32">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <AnimatePresence mode="popLayout">
+              {filteredProducts.map((product, idx) => (
+                <motion.div
+                  key={product.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ delay: idx * 0.05 }}
+                  onClick={() => setSelectedProduct(product)}
+                  className="group cursor-pointer"
                 >
-                  <Heart
-                    size={18}
-                    className={`transition-colors duration-300 ${
-                      wishlist.includes(product.id)
-                        ? "fill-red-500 stroke-red-500"
-                        : "stroke-gray-600 group-hover:stroke-red-500"
-                    }`}
-                  />
-                </button>
-
-                {/* Image Container */}
-                <div
-                  className={`${
-                    viewMode === "grid" ? "h-64" : "w-48 h-48"
-                  } relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100`}
-                >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className={`w-full h-full object-contain p-6 transition-transform duration-700 ${
-                      hoveredId === product.id ? "scale-110" : "scale-100"
-                    }`}
-                  />
-                  
-                  {/* Quick View Overlay */}
-                  <AnimatePresence>
-                    {hoveredId === product.id && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-black/5 backdrop-blur-sm flex items-center justify-center gap-3"
-                      >
-                        <button 
-                          onClick={(e) => quickView(product.id, e)}
-                          className="p-3 bg-white rounded-full shadow-lg hover:bg-[#71d2ba] hover:text-white transition-all duration-300 transform hover:scale-110"
-                        >
-                          <Eye size={20} />
-                        </button>
-                        <button 
-                          onClick={(e) => addToCart(product.id, e)}
-                          className="p-3 bg-white rounded-full shadow-lg hover:bg-[#71d2ba] hover:text-white transition-all duration-300 transform hover:scale-110"
-                        >
-                          <ShoppingBag size={20} />
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Out of Stock Overlay */}
-                  {!product.inStock && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span className="bg-white px-4 py-2 rounded-full text-sm font-semibold text-gray-900">
-                        Out of Stock
+                  <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden bg-white shadow-sm border border-brand-primary/5 mb-6">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-contain p-8 group-hover:scale-110 transition-transform duration-700"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          `https://picsum.photos/seed/${product.id}/600/800`;
+                      }}
+                    />
+                    <div className="absolute top-6 left-6 flex flex-col gap-2">
+                      <span className="px-3 py-1 bg-brand-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-full">
+                        {product.badge}
                       </span>
                     </div>
-                  )}
-                </div>
+                    <button
+                      onClick={(e) => toggleWishlist(product.id, e)}
+                      className="absolute top-6 right-6 w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white transition-colors"
+                    >
+                      <Heart
+                        size={18}
+                        className={
+                          wishlist.includes(product.id)
+                            ? "fill-rose-500 stroke-rose-500"
+                            : "text-brand-primary/40"
+                        }
+                      />
+                    </button>
+                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                      <div className="w-full py-4 bg-brand-primary text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl">
+                        <Plus size={20} />
+                        Quick Add
+                      </div>
+                    </div>
+                  </div>
 
-                {/* Product Info */}
-                <div className={`p-6 ${viewMode === "list" ? "flex-1" : ""}`}>
-                  <div className="mb-2">
-                    <p className="text-xs text-[#71d2ba] font-semibold uppercase tracking-wider">
-                      {product.origin}
-                    </p>
-                    <div className="text-lg font-semibold text-gray-900 hover:text-[#71d2ba] cursor-pointer transition-colors line-clamp-2">
+                  <div className="px-2">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-primary/40">
+                        {product.origin}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Star
+                          size={12}
+                          className="fill-brand-accent text-brand-accent"
+                        />
+                        <span className="text-xs font-bold">
+                          {product.rating}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-xl font-serif font-bold text-brand-primary mb-1 group-hover:text-brand-secondary transition-colors">
                       {product.name}
                     </div>
-                  </div>
-
-                  {/* Benefits */}
-                  <div className="flex flex-wrap gap-2 my-3">
-                    {product.benefits.map((benefit, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-[#71d2ba]/10 text-[#71d2ba] text-xs rounded-full border border-[#71d2ba]/20"
-                      >
-                        {benefit}
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg font-bold text-brand-primary">
+                        ₹{product.mrp}
                       </span>
-                    ))}
+                      <span className="text-sm text-brand-primary/30 line-through">
+                        ₹{Math.round(product.mrp * 1.2)}
+                      </span>
+                    </div>
                   </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        </div>
+      </section>
 
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex">
+      {/* Product Detail Modal */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProduct(null)}
+              className="absolute inset-0 bg-brand-primary/40 backdrop-blur-xl"
+            />
+            <motion.div
+              layoutId={`product-${selectedProduct.id}`}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-5xl bg-brand-cream rounded-[40px] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
+            >
+              <button
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-6 right-6 z-10 w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white transition-colors"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="w-full md:w-1/2 bg-white p-12 flex items-center justify-center">
+                <img
+                  src={selectedProduct.image}
+                  alt={selectedProduct.name}
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      `https://picsum.photos/seed/${selectedProduct.id}/800/800`;
+                  }}
+                />
+              </div>
+
+              <div className="w-full md:w-1/2 p-12 overflow-y-auto">
+                <div className="mb-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="px-3 py-1 bg-brand-primary/10 text-brand-primary text-[10px] font-bold uppercase tracking-widest rounded-full">
+                      {selectedProduct.badge}
+                    </span>
+                    <span className="text-xs font-bold text-brand-primary/40 uppercase tracking-widest">
+                      {selectedProduct.origin}
+                    </span>
+                  </div>
+                  <div className="text-4xl font-serif font-bold text-brand-primary mb-4">
+                    {selectedProduct.name}
+                  </div>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
                           size={16}
-                          className={`${
-                            i < Math.floor(product.rating)
-                              ? "fill-yellow-400 stroke-yellow-400"
-                              : "stroke-gray-300"
-                          }`}
+                          className={
+                            i < Math.floor(selectedProduct.rating)
+                              ? "fill-brand-accent text-brand-accent"
+                              : "text-brand-primary/10"
+                          }
                         />
                       ))}
                     </div>
-                    <span className="text-sm text-gray-600">
-                      ({product.reviews.toLocaleString()})
+                    <span className="text-sm font-bold text-brand-primary/40">
+                      {selectedProduct.reviews} Verified Reviews
                     </span>
                   </div>
-
-                  {/* Price */}
-                  <div className="mb-4">
-                    <span className="text-2xl font-bold text-gray-900">
-                      ₹{product.mrp.toLocaleString()}
+                  <div className="flex items-baseline gap-4">
+                    <span className="text-3xl font-bold text-brand-primary">
+                      ₹{selectedProduct.mrp}
                     </span>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2">
-                    <button
-                      onClick={(e) => addToCart(product.id, e)}
-                      disabled={!product.inStock}
-                      className="flex-1 bg-gradient-to-r from-[#71d2ba] to-[#5fb8a0] hover:from-[#5fb8a0] hover:to-[#4da690] text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                    >
-                      <ShoppingBag size={18} />
-                      {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-                    </button>
-                    <button
-                      onClick={(e) => quickView(product.id, e)}
-                      className="p-3 border-2 border-gray-200 hover:border-[#71d2ba] rounded-xl transition-all duration-300 hover:shadow-lg group"
-                    >
-                      <Eye size={18} className="text-gray-600 group-hover:text-[#71d2ba]" />
-                    </button>
+                    <span className="text-lg text-brand-primary/20 line-through">
+                      ₹{Math.round(selectedProduct.mrp * 1.2)}
+                    </span>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
 
-        {/* Empty State */}
-        {filteredProducts.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20"
-          >
-            <div className="bg-white rounded-2xl shadow-xl p-12 max-w-md mx-auto">
-              <ShoppingBag size={48} className="mx-auto text-gray-400 mb-4" />
-              <div className="text-xl font-semibold text-gray-900 mb-2">
-                No products found
-              </div>
-              <p className="text-gray-600 mb-6">
-                We couldn't find any products matching "{search}"
-              </p>
-              <button
-                onClick={clearSearch}
-                className="px-6 py-3 bg-gradient-to-r from-[#71d2ba] to-[#5fb8a0] text-white rounded-xl hover:from-[#5fb8a0] hover:to-[#4da690] transition-all duration-300"
-              >
-                Clear Search
-              </button>
-            </div>
-          </motion.div>
-        )}
+                <div className="space-y-8 mb-10">
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-widest text-brand-primary/40 mb-3">
+                      The Essence
+                    </div>
+                    <div className="text-brand-primary/70 leading-relaxed">
+                      {selectedProduct.description}
+                    </div>
+                  </div>
 
-        {/* Cart Summary */}
-        {cart.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-8 bg-white rounded-xl shadow-lg p-4 flex items-center justify-between"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-[#71d2ba]/10 rounded-lg">
-                <ShoppingBag className="text-[#71d2ba]" size={24} />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">
-                  {cart.length} {cart.length === 1 ? 'item' : 'items'} in cart
-                </p>
-                <p className="text-sm text-gray-600">
-                  Total: ₹{cart.reduce((sum, id) => {
-                    const product = products.find(p => p.id === id);
-                    return sum + (product?.mrp || 0);
-                  }, 0).toLocaleString()}
-                </p>
-              </div>
-            </div>
-            <button className="px-6 py-2 bg-[#71d2ba] text-white rounded-lg hover:bg-[#5fb8a0] transition-all duration-300">
-              View Cart
-            </button>
-          </motion.div>
-        )}
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <div className="text-xs font-bold uppercase tracking-widest text-brand-primary/40 mb-3">
+                        Key Benefits
+                      </div>
+                      <ul className="space-y-2">
+                        {selectedProduct.benefits.map((b) => (
+                          <li
+                            key={b}
+                            className="flex items-center gap-2 text-sm text-brand-primary/80"
+                          >
+                            <Leaf size={14} className="text-brand-secondary" />
+                            {b}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold uppercase tracking-widest text-brand-primary/40 mb-3">
+                        Ingredients
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProduct.ingredients.map((i) => (
+                          <span
+                            key={i}
+                            className="px-2 py-1 bg-brand-primary/5 rounded-md text-[10px] font-medium text-brand-primary/60"
+                          >
+                            {i}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
 
-        {/* Features Section */}
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { icon: Shield, title: "Premium Quality", desc: "Authenticated & Tested" },
-            { icon: Truck, title: "Free Shipping", desc: "On orders above ₹999" },
-            { icon: RefreshCw, title: "Easy Returns", desc: "30-day return policy" }
-          ].map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-4"
-            >
-              <div className="p-3 bg-[#71d2ba]/10 rounded-lg">
-                <feature.icon className="text-[#71d2ba]" size={24} />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">{feature.title}</div>
-                <p className="text-sm text-gray-600">{feature.desc}</p>
+                  <div className="p-6 bg-brand-primary/5 rounded-2xl border border-brand-primary/10">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Clock size={18} className="text-brand-primary/40" />
+                      <div className="text-sm font-bold text-brand-primary">
+                        Ritual Guide
+                      </div>
+                    </div>
+                    <div className="text-sm text-brand-primary/60">
+                      {selectedProduct.usage}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-1 py-5 bg-brand-primary text-center text-white rounded-2xl font-bold hover:bg-brand-secondary transition-all shadow-xl shadow-brand-primary/20">
+                    Add to Ritual Bag
+                  </div>
+                  <button
+                    onClick={(e) => toggleWishlist(selectedProduct.id, e)}
+                    className="w-16 py-5 border border-brand-primary/10 rounded-2xl flex items-center justify-center hover:bg-brand-primary/5 transition-all"
+                  >
+                    <Heart
+                      size={24}
+                      className={
+                        wishlist.includes(selectedProduct.id)
+                          ? "fill-rose-500 stroke-rose-500"
+                          : "text-brand-primary/20"
+                      }
+                    />
+                  </button>
+                </div>
               </div>
             </motion.div>
-          ))}
-        </div>
-      </div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

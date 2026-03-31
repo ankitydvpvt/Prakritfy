@@ -1,4 +1,5 @@
 "use client";
+import { NavbarDemo } from "@/components/Universal/NavbarDemo";
 import React, { useState } from "react";
 import {
   FaPhone,
@@ -81,6 +82,7 @@ export default function PremiumContactPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#061411] via-[#0b2620] to-[#4fb9a0] text-white">
+      <NavbarDemo />
       {/* HEADER */}
       <section className="text-center py-20 px-4">
         <div className="text-5xl md:text-6xl font-semibold tracking-tight bg-gradient-to-r from-slate-100 to-cyan-200 bg-clip-text text-transparent">

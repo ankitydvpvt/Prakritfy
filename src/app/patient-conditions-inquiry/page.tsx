@@ -1,5 +1,5 @@
 "use client";
-
+import { NavbarDemo } from "@/components/Universal/NavbarDemo";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -30,6 +30,7 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
+import Footer from "@/components/Universal/Footer";
 
 // Use Render production API only
 const BASE_URL = "https://nutribot-backend-9e3a.onrender.com";
@@ -459,8 +460,8 @@ export default function EmeraldPremiumHealthForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-teal-900 to-green-950 py-12 px-4 font-sans selection:bg-emerald-400/30 overflow-hidden relative">
-      {/* Animated gradient orbs - Green theme */}
+    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-teal-900 to-green-950  font-sans selection:bg-emerald-400/30 overflow-hidden relative">
+      <NavbarDemo />
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-emerald-400/20 via-green-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 via-teal-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
@@ -984,20 +985,20 @@ export default function EmeraldPremiumHealthForm() {
                       name="email"
                       value={form.email}
                       onChange={handleChange}
-                      placeholder="   you@example.com"
-                      className="w-full p-3.5 bg-white border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all group-hover:border-white/30"
+                      placeholder="you@example.com"
+                      className="w-full p-3.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all"
                     />
                   </div>
                 </div>
               </section>
 
               {/* Premium Submit Button - Emerald Green */}
-              <motion.button
+              <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition ${
+                className={`w-full py-4 cursor-pointer rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition ${
                   isSubmitting
                     ? "bg-gray-500 text-white cursor-not-allowed"
                     : "bg-gradient-to-r from-emerald-500 to-teal-600 text-white"
@@ -1014,7 +1015,7 @@ export default function EmeraldPremiumHealthForm() {
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
-              </motion.button>
+              </motion.div>
             </form>
           </div>
         </motion.div>
@@ -1047,6 +1048,7 @@ export default function EmeraldPremiumHealthForm() {
           animation: spin-slow 30s linear infinite;
         }
       `}</style>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { NavbarDemo } from "@/components/Universal/NavbarDemo";
 import Footer from "@/components/Universal/Footer";
-import Foundation from "@/app/about/Foundation";
+// import Foundation from "@/app/about/Foundation";
 import Third from "@/app/about/Third";
 import PersonalStory from "./PersonalStory";
 import Standby from "./Standby";
@@ -10,7 +10,6 @@ import Team from "./Team";
 const page = () => {
   return (
     <div className="bg-gradient-to-r from-[#273f22] to-[#646c3f]   ">
-      
       <div className="absolute text-white w-full z-10">
         <NavbarDemo />
       </div>
@@ -21,7 +20,7 @@ const page = () => {
       >
         {/* Background Image */}
         <img
-          src="nature.jpg"
+          src="/nature.jpg"
           alt="Nature"
           className="w-full h-full object-cover absolute inset-0"
         />
@@ -35,8 +34,8 @@ const page = () => {
           <div className="absolute font-bold text-xl md:text-4xl lg:text-6xl">
             About Prakritify <br />
             Learn More
-
-            <div className="absolute m-5 p-3 hover:bg-[#175986] hover:text-white
+            <div
+              className="absolute m-5 p-3 hover:bg-[#175986] hover:text-white
               transition-all duration-300 bg-white text-black lg:text-2xl md:text-xl text-sm rounded-full"
             >
               <button className="flex justify-center w-full items-center h-5 ">
@@ -47,14 +46,14 @@ const page = () => {
         </div>
       </div>
 
-      <Foundation />
+      {/* <Foundation /> */}
       {/* <Third />
       <PersonalStory />
       <Standby />
       <Name />
       <Team /> */}
 
-       <Footer />
+      <Footer />
     </div>
   );
 };

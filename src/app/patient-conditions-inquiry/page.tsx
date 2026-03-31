@@ -1,5 +1,5 @@
 "use client";
-import { NavbarDemo } from "@/components/Universal/NavbarDemo";
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -31,6 +31,7 @@ import {
   Zap,
 } from "lucide-react";
 import Footer from "@/components/Universal/Footer";
+import { NavbarDemo } from "@/components/Universal/NavbarDemo";
 
 // Use Render production API only
 const BASE_URL = "https://nutribot-backend-9e3a.onrender.com";
@@ -236,9 +237,11 @@ export default function EmeraldPremiumHealthForm() {
   );
   const [activeSection, setActiveSection] = useState<string>("conditions");
   const [hoveredDisease, setHoveredDisease] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  // wake up Render's free tier on mount
+  // wake up Render's free tier on mount and set mounted flag
   useEffect(() => {
+    setMounted(true);
     const wake = async () => {
       try {
         await fetch(`${BASE_URL}/api/questionnaire/all?page=1&limit=1`);
@@ -404,16 +407,23 @@ export default function EmeraldPremiumHealthForm() {
       const payload = {
         phoneNumber: form.phone.trim(),
         name: form.name.trim(),
-        ...(form.email.trim() && { email: form.email.trim() }),
+        ...(form.email && form.email.trim()
+          ? { email: form.email.trim() }
+          : {}),
         selectedConditions: form.diseases,
         responses: {
-          ...(form.gender && { gender: form.gender.toLowerCase() }),
-          ...(form.age && { age: Number(form.age) }),
-          ...(form.weight && { weightKg: parseFloat(form.weight) }),
+          ...(form.gender ? { gender: form.gender.toLowerCase() } : {}),
+          ...(form.age ? { age: Number(form.age) } : {}),
+          ...(form.weight ? { weightKg: parseFloat(form.weight) } : {}),
           ...(Number.isFinite(heightNum) ? { heightCm: heightNum } : {}),
           ...(form.diseases.length > 0 ? { conditions } : {}),
         },
       };
+
+      console.log(
+        "📤 Sending payload to backend:",
+        JSON.stringify(payload, null, 2),
+      );
 
       const res = await fetch(`${BASE_URL}/api/questionnaire/create`, {
         method: "POST",
@@ -422,6 +432,8 @@ export default function EmeraldPremiumHealthForm() {
       });
 
       const data = await res.json();
+
+      console.log("📥 Response from backend:", data);
 
       if (!res.ok) {
         const detail = Array.isArray(data?.details)
@@ -460,26 +472,28 @@ export default function EmeraldPremiumHealthForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-teal-900 to-green-950  font-sans selection:bg-emerald-400/30 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-teal-900 to-green-950  px-4 font-sans selection:bg-emerald-400/30 overflow-hidden relative">
+      {/* Animated gradient orbs - Green theme */}
       <NavbarDemo />
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-emerald-400/20 via-green-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 via-teal-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-emerald-400/10 via-green-400/10 to-teal-400/10 rounded-full blur-3xl animate-spin-slow" />
 
-        {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-emerald-400/30 rounded-full animate-float-particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${3 + Math.random() * 5}s`,
-            }}
-          />
-        ))}
+        {/* Floating particles - only render on client after mount */}
+        {mounted &&
+          [...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-emerald-400/30 rounded-full animate-float-particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${3 + Math.random() * 5}s`,
+              }}
+            />
+          ))}
       </div>
 
       <AnimatePresence>
@@ -512,7 +526,7 @@ export default function EmeraldPremiumHealthForm() {
                 icon: <User className="w-8 h-4 pr-5 m-3" />,
               },
             ].map((section) => (
-              <button
+              <div
                 key={section.id}
                 onClick={() => scrollToSection(section.id)}
                 className={`relative flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
@@ -532,7 +546,7 @@ export default function EmeraldPremiumHealthForm() {
                   {section.icon}
                   {section.label}
                 </span>
-              </button>
+              </div>
             ))}
           </div>
         </motion.div>
@@ -993,12 +1007,12 @@ export default function EmeraldPremiumHealthForm() {
               </section>
 
               {/* Premium Submit Button - Emerald Green */}
-              <motion.div
+              <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-4 cursor-pointer rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition ${
+                className={`w-full py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition ${
                   isSubmitting
                     ? "bg-gray-500 text-white cursor-not-allowed"
                     : "bg-gradient-to-r from-emerald-500 to-teal-600 text-white"
@@ -1015,7 +1029,7 @@ export default function EmeraldPremiumHealthForm() {
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
-              </motion.div>
+              </motion.button>
             </form>
           </div>
         </motion.div>

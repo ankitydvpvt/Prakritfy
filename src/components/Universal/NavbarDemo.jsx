@@ -20,7 +20,7 @@ export function NavbarDemo() {
     { name: "Home", link: "/" },
     { name: "About", link: "/about" },
     { name: "Contact", link: "/contact" },
-    { name: "Product", link: "/product" },
+    // { name: "Product", link: "/product" },
 
     { name: "Patient Inquiry", link: "/patient-conditions-inquiry" },
   ];

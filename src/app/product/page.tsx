@@ -148,7 +148,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen selection:bg-brand-accent/30 bg-[#f6cf81]">
+    <div className="min-h-screen selection:bg-brand-accent/30 bg-gradient-to-r from-[#061411] via-[#0b2620] to-[#4fb9a0]">
       <NavbarDemo />
 
       {/* Hero Section */}

@@ -40,9 +40,9 @@ const footerLinks = [
 ];
 
 const socials = [
-  { icon: <FaInstagram />, label: "Instagram", href: "#" },
-  { icon: <FaFacebookF />, label: "Facebook", href: "#" },
-  { icon: <FaYoutube />, label: "YouTube", href: "#" },
+  { icon: <FaInstagram />, label: "Instagram", href: "https://www.instagram.com/prakritifyy?igsh=MWY5ZDVwOXhiZ2lkMg==" },
+  { icon: <FaFacebookF />, label: "Facebook", href: "https://www.facebook.com/profile.php?id=61587864367777" },
+  { icon: <FaYoutube />, label: "YouTube", href: "https://youtube.com/@prakritifyy?si=wZTADPjGjjKEpQo0" },
 ];
 
 export default function Footer() {
@@ -74,21 +74,8 @@ export default function Footer() {
             {/* BRAND */}
             <Stack spacing={6}>
               <Flex align="center" gap={3}>
-                <Box
-                  bgGradient="linear(to-br, #7CBF9E, #548F9D)"
-                  rounded="xl"
-                  px={3}
-                  py={1.5}
-                  fontWeight="800"
-                  letterSpacing="widest"
-                  fontSize="sm"
-                  boxShadow="0 10px 30px rgba(124,191,158,0.4)"
-                >
-                  PR
-                </Box>
-                <Heading size="md" letterSpacing="tight">
-                  Prakritify
-                </Heading>
+                <Box as="img" src="/FinalLogo.png" alt="Prakritify Logo" h="50px" w="auto" />
+                
               </Flex>
 
               <Text color="whiteAlpha.800" fontSize="sm" lineHeight="1.8">
@@ -138,19 +125,25 @@ export default function Footer() {
 
                 <Stack spacing={3}>
                   {section.items.map((item) => (
-                    <Link
-                      key={item.label}
-                      as={NextLink}
-                      href={item.to}
-                      fontSize="sm"
-                      color="whiteAlpha.700"
-                      _hover={{
-                        color: "#7CBF9E",
-                        transform: "translateX(4px)",
-                      }}
-                    >
-                      {item.label}
-                    </Link>
+                    (item.label === "About" || item.label === "Contact Support") ? (
+                      <Link
+                        key={item.label}
+                        as={NextLink}
+                        href={item.to}
+                        fontSize="sm"
+                        color="whiteAlpha.700"
+                        _hover={{
+                          color: "#7CBF9E",
+                          transform: "translateX(4px)",
+                        }}
+                      >
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <Text key={item.label} fontSize="sm" color="whiteAlpha.700">
+                        {item.label}
+                      </Text>
+                    )
                   ))}
                 </Stack>
               </Box>
@@ -216,27 +209,15 @@ export default function Footer() {
             </Text>
 
             <Stack direction={{ base: "column", md: "row" }} spacing={6}>
-              <Link
-                as={NextLink}
-                href="/contact#privacy"
-                _hover={{ color: "#7CBF9E" }}
-              >
+              <Text color="whiteAlpha.700">
                 Privacy Policy
-              </Link>
-              <Link
-                as={NextLink}
-                href="/contact#terms"
-                _hover={{ color: "#7CBF9E" }}
-              >
+              </Text>
+              <Text color="whiteAlpha.700">
                 Terms of Service
-              </Link>
-              <Link
-                as={NextLink}
-                href="/contact#faq"
-                _hover={{ color: "#7CBF9E" }}
-              >
+              </Text>
+              <Text color="whiteAlpha.700">
                 FAQ
-              </Link>
+              </Text>
             </Stack>
           </Flex>
         </Flex>

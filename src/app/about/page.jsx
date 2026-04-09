@@ -9,7 +9,7 @@ import Team from "./Team";
 
 const page = () => {
   return (
-    <div className="bg-gradient-to-r from-[#273f22] to-[#646c3f]   ">
+    <div className="bg-gradient-to-r from-[#061411] via-[#0b2620] to-[#4fb9a0]   ">
       <div className="absolute text-white w-full z-10">
         <NavbarDemo />
       </div>
@@ -19,11 +19,7 @@ const page = () => {
         overflow-hidden flex items-center justify-center"
       >
         {/* Background Image */}
-        <img
-          src="/nature.jpg"
-          alt="Nature"
-          className="w-full h-full object-cover absolute inset-0"
-        />
+        
 
         {/* Centered Overlay Text */}
         <div

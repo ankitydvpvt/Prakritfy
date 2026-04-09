@@ -36,6 +36,12 @@ const productCategories = [
       "Strengthen cardiac function, optimize lipids, and protect vascular integrity with cardiotonic herbs.",
   },
   {
+    img: "Liver.jpg",
+    title: "Liver",
+    description:
+      "Detoxify, regenerate, and elevate liver performance with antioxidant-rich herbs and nutraceuticals.",
+  },
+  {
     img: "Bone.png",
     title: " Bone/Joint/Nerve Health",
     description:
@@ -46,12 +52,6 @@ const productCategories = [
     title: "Gut Health",
     description:
       "Support healthy digestion, improve gut balance, and enhance nutrient absorption with natural, targeted botanicals.",
-  },
-  {
-    img: "Liver.jpg",
-    title: "Liver",
-    description:
-      "Detoxify, regenerate, and elevate liver performance with antioxidant-rich herbs and nutraceuticals.",
   },
   {
     img: "PCOS.webp",
@@ -99,9 +99,86 @@ function Categories() {
           </Text>
         </Stack>
 
-        {/* Cards */}
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
-          {productCategories.map((item) => (
+        {/* Cards Grid */}
+        {/* First 6 cards - 3 column layout */}
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} mb={10}>
+          {productCategories.slice(0, 6).map((item) => (
+            <Stack
+              key={item.title}
+              bg="white"
+              rounded="3xl"
+              overflow="hidden"
+              boxShadow="0 20px 50px rgba(0,0,0,0.08)"
+              transition="all 0.35s ease"
+              _hover={{
+                transform: "translateY(-10px)",
+                boxShadow: "0 35px 80px rgba(0,0,0,0.12)",
+              }}
+            >
+              {/* Image */}
+              <Box position="relative" h="220px">
+                <Image
+                  src={item.img}
+                  alt={item.title}
+                  h="100%"
+                  w="100%"
+                  objectFit="cover"
+                />
+                {/* subtle image overlay */}
+                <Box
+                  position="absolute"
+                  inset="0"
+                  bgGradient="linear(to-t, rgba(0,0,0,0.45), transparent)"
+                />
+              </Box>
+
+              {/* Content */}
+              <Stack spacing={4} p={6}>
+                <Tag
+                  alignSelf="flex-start"
+                  bg="#E6F4F1"
+                  color="#028f7d"
+                  rounded="full"
+                  px={4}
+                  py={1}
+                  fontWeight="600"
+                >
+                  {item.title}
+                </Tag>
+
+                <Text color="#4A6F6A" fontSize="md">
+                  {item.description}
+                </Text>
+
+                <Button
+                  onClick={() => router.push("/contact")}
+                  rounded="full"
+                  bg="#028f7d"
+                  color="white"
+                  size="sm"
+                  fontWeight="600"
+                  alignSelf="flex-start"
+                  px={6}
+                  _hover={{
+                    bg: "#027468",
+                    transform: "translateY(-1px)",
+                  }}
+                >
+                  Book Free Consultation
+                </Button>
+              </Stack>
+            </Stack>
+          ))}
+        </SimpleGrid>
+
+        {/* Last 2 cards - Centered */}
+        <SimpleGrid 
+          columns={{ base: 1, md: 2 }} 
+          spacing={10} 
+          maxW="800px" 
+          mx="auto"
+        >
+          {productCategories.slice(6).map((item) => (
             <Stack
               key={item.title}
               bg="white"

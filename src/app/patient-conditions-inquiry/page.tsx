@@ -438,7 +438,7 @@ export default function EmeraldPremiumHealthForm() {
       if (!res.ok) {
         const detail = Array.isArray(data?.details)
           ? data.details.join("\n")
-          : (data?.error ?? "Submission failed.");
+          : (data?.error ?? data?.message ?? "Submission failed. Please check your information and try again.");
         throw new Error(detail);
       }
 
@@ -456,8 +456,14 @@ export default function EmeraldPremiumHealthForm() {
         conditionDetails: {},
       });
     } catch (err: any) {
-      console.error("❌ Error:", err);
-      showToast(err.message || "Something went wrong", "error");
+      console.error("❌ Error details:", {
+        message: err?.message,
+        error: err,
+        errorString: err?.toString(),
+      });
+      const errorMsg = err?.message || 
+        (typeof err === 'string' ? err : "Something went wrong. Please try again.");
+      showToast(errorMsg, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -472,7 +478,7 @@ export default function EmeraldPremiumHealthForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-teal-900 to-green-950  px-4 font-sans selection:bg-emerald-400/30 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-r from-[#061411] via-[#0b2620] to-[#4fb9a0]  px-4 font-sans selection:bg-emerald-400/30 overflow-hidden relative">
       {/* Animated gradient orbs - Green theme */}
       <NavbarDemo />
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -781,22 +787,22 @@ export default function EmeraldPremiumHealthForm() {
                                         e.target.value,
                                       )
                                     }
-                                    className="w-full p-3 pr-10 bg-white border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all appearance-none"
+                                    className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all appearance-none font-medium"
                                   >
-                                    <option value="" className="bg-white">
+                                    <option value="" className="bg-white text-gray-900">
                                       Select option
                                     </option>
                                     {q.options?.map((opt: string) => (
                                       <option
                                         key={opt}
                                         value={opt}
-                                        className="bg-white"
+                                        className="bg-white text-gray-900"
                                       >
                                         {opt}
                                       </option>
                                     ))}
                                   </select>
-                                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
+                                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                                 </div>
                               ) : q.type === "radio" ? (
                                 <div className="flex gap-3 flex-wrap">
@@ -849,7 +855,7 @@ export default function EmeraldPremiumHealthForm() {
                                     )
                                   }
                                   placeholder={q.placeholder}
-                                  className="w-full p-3 bg-white border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all"
+                                  className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                                 />
                               )}
                             </div>
@@ -885,9 +891,9 @@ export default function EmeraldPremiumHealthForm() {
                       name="name"
                       value={form.name}
                       onChange={handleChange}
-                      placeholder="     Enter your full name"
+                      placeholder="Enter your full name"
                       required
-                      className="w-full p-3.5 bg-white border border-white/20 rounded-xl text-white placeholder-white focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all group-hover:border-white/30"
+                      className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                     />
                   </div>
 
@@ -901,10 +907,10 @@ export default function EmeraldPremiumHealthForm() {
                       name="age"
                       value={form.age}
                       onChange={handleChange}
-                      placeholder="   Enter your age"
+                      placeholder="Enter your age"
                       min={1}
                       max={120}
-                      className="w-full p-3.5 bg-white border border-white/20 rounded-xl text-white placeholder-white focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all group-hover:border-white"
+                      className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                     />
                   </div>
 
@@ -947,9 +953,9 @@ export default function EmeraldPremiumHealthForm() {
                       name="weight"
                       value={form.weight}
                       onChange={handleChange}
-                      placeholder="     Enter your weight"
+                      placeholder="Enter your weight"
                       min={1}
-                      className="w-full p-3.5 bg-white border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all group-hover:border-white/30"
+                      className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                     />
                   </div>
 
@@ -963,8 +969,8 @@ export default function EmeraldPremiumHealthForm() {
                       name="height"
                       value={form.height}
                       onChange={handleChange}
-                      placeholder="     Enter height or 'n'"
-                      className="w-full p-3.5 bg-white border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all group-hover:border-white/30"
+                      placeholder="Enter height or 'n'"
+                      className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                     />
                     <div className="text-xs text-white/40 mt-1 ml-1">
                       Enter 'n' if not known
@@ -982,9 +988,10 @@ export default function EmeraldPremiumHealthForm() {
                       name="phone"
                       value={form.phone}
                       onChange={handleChange}
-                      placeholder="     e.g. 923001234567"
+                      placeholder="e.g. 9230012345"
                       required
-                      className="w-full p-3.5 bg-white border border-white/20 rounded-xl text-white placeholder-black focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all group-hover:border-white/30"
+                      maxLength={10}
+                      className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                     />
                   </div>
 
@@ -1000,36 +1007,45 @@ export default function EmeraldPremiumHealthForm() {
                       value={form.email}
                       onChange={handleChange}
                       placeholder="you@example.com"
-                      className="w-full p-3.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all"
+                      className="w-full px-5 py-3 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                     />
                   </div>
                 </div>
               </section>
 
-              {/* Premium Submit Button - Emerald Green */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={isSubmitting}
-                className={`w-full py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition ${
-                  isSubmitting
-                    ? "bg-gray-500 text-white cursor-not-allowed"
-                    : "bg-gradient-to-r from-emerald-500 to-teal-600 text-white"
-                }`}
+              {/* Submit Button - Prominent Teal */}
+              <div className="flex justify-center">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  disabled={isSubmitting}
+                  style={{
+                    backgroundColor: isSubmitting ? "#D1D5DB" : "#4FB9A0",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isSubmitting) (e.target as HTMLButtonElement).style.backgroundColor = "#3a9a88";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSubmitting) (e.target as HTMLButtonElement).style.backgroundColor = "#4FB9A0";
+                  }}
+                  className={`px-12 py-3 rounded font-bold text-base flex items-center justify-center gap-2 transition-all duration-300 shadow-lg text-white ${
+                    isSubmitting ? "cursor-not-allowed" : "hover:shadow-2xl"
+                  }`}
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Processing...</span>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Processing</span>
                   </>
                 ) : (
                   <>
                     <span>Submit</span>
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </motion.button>
+              </div>
             </form>
           </div>
         </motion.div>

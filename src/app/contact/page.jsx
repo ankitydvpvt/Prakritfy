@@ -127,99 +127,135 @@ export default function PremiumContactPage() {
 
         {/* FORM */}
         <div className="bg-white/[0.05] h-[90vh] backdrop-blur-2xl border border-white/10 rounded-2xl p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-          <div className="text-3xl font-semibold mb-2">Book a Consultation</div>
-          <div className="text-slate-400 mb-6">
+          <div className="text-3xl font-semibold mb-2 text-gray-900">Book a Consultation</div>
+          <div className="text-gray-600 mb-6">
             Our specialists will contact you shortly.
           </div>
 
           {isSubmitted && (
             <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-400/30 rounded-xl p-4 mb-6">
               <FaCheckCircle className="text-emerald-400 text-xl" />
-              <span>Your request has been submitted successfully.</span>
+              <span className="text-gray-900 font-medium">Your request has been submitted successfully.</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <Input
-              label="Full Name"
-              icon={<FaUser />}
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className=" mb-5 h-10"
-            />
+  
+  {/* Full Name */}
+  <div>
+    <label className="flex items-center gap-2 mb-2 font-medium text-gray-900">
+      <FaUser /> Full Name
+    </label>
+    <input
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+      required
+      className="w-full px-5 py-3 bg-white !text-black border border-gray-300 rounded-md placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
+    />
+  </div>
 
-            <Input
-              label="Phone Number"
-              icon={<FaPhone />}
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className=" mt-10 mb-5 h-10"
-            />
+  {/* Phone */}
+  <div>
+    <label className="flex items-center gap-2 mb-2 font-medium text-gray-900">
+      <FaPhone /> Phone Number
+    </label>
+    <input
+      name="phone"
+      type="tel"
+      value={formData.phone}
+      onChange={handleChange}
+      required
+      maxLength={10}
+      className="w-full px-5 py-3 bg-white !text-black border border-gray-300 rounded-md placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
+    />
+  </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-10 mt-10">
-              <Input
-                type="date"
-                label="Preferred Date"
-                icon={<FaCalendarAlt />}
-                name="preferredDate"
-                value={formData.preferredDate}
-                onChange={handleChange}
-                // className="p-10"
-              />
-              <select
-                name="preferredTime"
-                value={formData.preferredTime}
-                onChange={handleChange}
-                className="w-full bg-white/[0.04] border border-white/5 rounded-xl mt-5 mb-5 h-10"
-              >
-                <option className="bg-white text-blue-500" value="">
-                  Select Time
-                </option>
-                <option className="bg-white text-blue-500" value="morning">
-                  Morning
-                </option>
-                <option className="bg-white text-blue-500" value="afternoon">
-                  Afternoon
-                </option>
-                <option className="bg-white text-blue-500" value="evening">
-                  Evening
-                </option>
-              </select>
-            </div>
+  {/* Date + Time */}
+  <div className="grid grid-cols-2 gap-4">
+    
+    {/* Date */}
+    <div>
+      <label className="flex items-center gap-2 mb-2 font-medium text-gray-900">
+        <FaCalendarAlt /> Preferred Date
+      </label>
+      <input
+        type="date"
+        name="preferredDate"
+        value={formData.preferredDate}
+        onChange={handleChange}
+        min={new Date().toISOString().split("T")[0]}
+        className="w-full px-5 py-3 bg-white !text-black border border-gray-300 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
+      />
+    </div>
 
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              rows="4"
-              placeholder="Additional notes"
-              className="w-full bg-white/[0.04] border border-white/5 rounded-xl p-4 mt-50"
-            />
+    {/* Time */}
+    <div>
+      <label className="flex items-center gap-2 mb-2 font-medium text-gray-900">
+        <FaCalendarAlt /> Time
+      </label>
+      <select
+        name="preferredTime"
+        value={formData.preferredTime}
+        onChange={handleChange}
+        className="w-full px-5 py-3 bg-white !text-black border border-gray-300 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400"
+      >
+        <option value="" className="!text-black">Select Time</option>
+        <option value="morning" className="!text-black">Morning</option>
+        <option value="afternoon" className="!text-black">Afternoon</option>
+        <option value="evening" className="!text-black">Evening</option>
+      </select>
+    </div>
+  </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`w-full rounded-full py-4 text-lg font-semibold transition ${
-                isSubmitting
-                  ? "bg-slate-700 text-slate-300"
-                  : "bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 ]"
-              }`}
-            >
-              {isSubmitting ? (
-                <span className="relative z-10 flex items-center gap-3 text-emerald-100 tracking-wide">
-                  <FaSpinner className="animate-spin text-lg opacity-90" />
-                  <span className="font-medium">Processing</span>
-                </span>
-              ) : (
-                <span className="relative z-10 mt-10  flex justify-center transition-transform duration-300 hover:bg-white hover:text-black hover:scale-105 h-10 rounded-4xl bg-[#061512] items-center gap-3 tracking-wide">
-                  <span className="font-semibold ">Book Consultation</span>
-                  <FaArrowRight className="text-white/90 transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-              )}
-            </button>
-          </form>
+  {/* Notes */}
+  <div>
+    <label className="flex items-center gap-2 mb-2 font-medium text-gray-900">
+      <FaPaperPlane /> Additional Notes
+    </label>
+    <textarea
+      name="message"
+      value={formData.message}
+      onChange={handleChange}
+      rows="4"
+      placeholder="Additional notes..."
+      className="w-full px-5 py-3 bg-white !text-black border border-gray-300 rounded-md placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 resize-none"
+    />
+  </div>
+
+  {/* Button */}
+  <div className="flex justify-center">
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      style={{
+        backgroundColor: isSubmitting ? "#9CA3AF" : "#4FB9A0",
+      }}
+      onMouseEnter={(e) => {
+        if (!isSubmitting) e.target.style.backgroundColor = "#3a9a88";
+      }}
+      onMouseLeave={(e) => {
+        if (!isSubmitting) e.target.style.backgroundColor = "#4FB9A0";
+      }}
+      className={`flex items-center gap-2 px-10 py-3 rounded font-bold text-base transition-all shadow-lg text-white ${
+        isSubmitting ? "cursor-not-allowed" : "hover:shadow-2xl"
+      }`}
+    >
+      {isSubmitting ? (
+        <>
+          <FaSpinner className="animate-spin" />
+          Processing
+        </>
+      ) : (
+        <>
+          Book Consultation
+          <FaArrowRight />
+        </>
+      )}
+    </button>
+  </div>
+
+</form>
         </div>
       </section>
 

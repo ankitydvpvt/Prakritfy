@@ -1,16 +1,34 @@
 "use client";
 import emailjs from "emailjs-com";
-import { Button, Textarea, Portal } from "@chakra-ui/react";
+import { Button, Portal } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function Form({ open, setOpen }) {
+  const [formData, setFormData] = useState({
+    full_name: "",
+    phone: "",
+    email: "",
+    condition: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "phone") {
+      const numericValue = value.replace(/[^0-9]/g, "");
+      setFormData({ ...formData, [name]: numericValue });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     emailjs.sendForm("SERVICE_ID", "TEMPLATE_ID", e.target, "PUBLIC_KEY").then(
       () => {
         alert("Consultation request sent successfully!");
-        e.target.reset();
+        setFormData({ full_name: "", phone: "", email: "", condition: "" });
         setOpen(false);
       },
       (error) => {
@@ -22,7 +40,7 @@ export default function Form({ open, setOpen }) {
 
   return (
     <>
-      {/* ================= BUTTON (ALWAYS VISIBLE) ================= */}
+      {/* Toggle Button */}
       <Portal>
         <Button
           onClick={() => setOpen((prev) => !prev)}
@@ -34,33 +52,22 @@ export default function Form({ open, setOpen }) {
           w="48px"
           bg="#05293c"
           color="white"
-          boxShadow="xl"
           zIndex="3000"
           borderRadius="16px 0 0 16px"
-          sx={{
-            writingMode: "vertical-rl",
-            textOrientation: "mixed",
-          }}
-          _hover={{ bg: "#05293c" }}
+          sx={{ writingMode: "vertical-rl" }}
         >
           {open ? "CLOSE" : "BOOK"}
         </Button>
       </Portal>
 
-      {/* ================= FORM (SLIDE + FADE) ================= */}
+      {/* Form */}
       <Portal>
         <div
-          className="
-          fixed bottom-4 right-4
-          w-[90%] sm:w-96
-          bg-[#026aa2]
-          rounded-2xl p-6
-          shadow-xl text-white
-        "
+          className="fixed bottom-4 right-4 w-[90%] sm:w-96 rounded-xl p-6 shadow-2xl text-white"
           style={{
             zIndex: 2999,
             background:
-              "linear-gradient(135deg, rgba(2,106,162,0.9), rgba(0,40,80,0.9))",
+              "linear-gradient(135deg, rgba(2,106,162,0.95), rgba(0,40,80,0.95))",
             transform: open
               ? "translateY(0) scale(1)"
               : "translateY(120%) scale(0.95)",
@@ -69,95 +76,111 @@ export default function Form({ open, setOpen }) {
             pointerEvents: open ? "auto" : "none",
           }}
         >
-          {/* Close Button */}
+          {/* Close */}
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-3 right-4 text-xl "
+            className="absolute top-4 right-4 text-xl"
           >
             ✕
           </button>
 
-          <div className="text-xl font-bold text-center">
-            Book a Free <br /> Consultation with Our Doctors
+          <div className="text-xl font-semibold text-center mb-2">
+            Book a Free Consultation
           </div>
 
-          <p className="text-sm text-center text-gray-200 pt-2">
-            Fill the details below to book your free consultation.
+          <p className="text-sm text-center text-gray-100 pb-5">
+            Fill the details below
           </p>
 
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {/* Full Name */}
-            <div>
-              <label className="text-sm font-medium">Full Name *</label>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-white">
+                Full Name *
+              </label>
               <input
                 type="text"
                 name="full_name"
                 required
-                placeholder="   Enter your name"
-                className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
+                value={formData.full_name}
+                onChange={handleChange}
+                placeholder="Enter your name"
+                className="w-full bg-white !text-black text-[15px] font-medium leading-[1.5] pl-6 pr-5 py-3.5 rounded-md border border-gray-300 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
-            {/* Phone Number */}
-            <div>
-              <label className="text-sm font-medium">
-                Phone Number (WhatsApp) *
+            {/* Phone */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-white">
+                Phone Number *
               </label>
-              <div className="flex items-center bg-white rounded-full mt-1 px-3">
-                <span className="mr-2 text-black">🇮🇳</span>
+
+              <div className="flex items-center gap-3 bg-white rounded-md border border-gray-300 pl-6 pr-5 py-3.5 transition-all focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
+                <span className="text-black text-lg shrink-0 flex items-center">
+                  🇮🇳
+                </span>
+
                 <input
-                  type="tel"
+                  type="text"
                   name="phone"
                   required
                   maxLength={10}
-                  placeholder="Enter number"
-                  inputMode="numeric"
-                  className="w-full py-3 text-black outline-none"
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                  }}
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="10 digits"
+                  className="flex-1 text-[15px] !text-black font-medium leading-[1.5] outline-none bg-white placeholder:text-gray-500"
                 />
               </div>
             </div>
 
             {/* Email */}
-            <div>
-              <label className="text-sm font-medium">Email ID</label>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-white">
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
-                placeholder="   Enter email"
-                className="w-full bg-white rounded-full mt-1 px-4 py-3 text-black outline-none"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                className="w-full bg-white !text-black text-[15px] font-medium leading-[1.5] pl-6 pr-5 py-3.5 rounded-md border border-gray-300 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
-            {/* Health Condition */}
-            <div>
-              <label className="text-sm font-medium">
-                Existing Health Conditions
+            {/* Condition */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-white">
+                Health Condition
               </label>
-              <Textarea
+              <textarea
                 name="condition"
                 rows={3}
-                bg="white"
-                color="black"
-                borderRadius="xl"
-                resize="none"
-                _focus={{ boxShadow: "none" }}
+                value={formData.condition}
+                onChange={handleChange}
+                placeholder="Enter details"
+                className="w-full bg-white !text-black text-[15px] font-medium leading-[1.5] pl-6 pr-5 py-3.5 rounded-md border border-gray-300 outline-none transition-all placeholder:text-gray-500 resize-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
-            {/* Submit Button */}
+            {/* Button */}
             <Button
               type="submit"
-              w="full"
-              bg="#71D2BA"
+              w="auto"
+              px={12}
+              style={{
+                backgroundColor: "#4FB9A0",
+              }}
               color="white"
-              py={6}
-              borderRadius="full"
-              _hover={{ bg: "#e8d469", color: "black" }}
+              py={3}
+              borderRadius="md"
+              fontWeight="semibold"
+              _hover={{ 
+                bg: "#3a9a88",
+                boxShadow: "0 10px 30px rgba(79, 185, 160, 0.3)"
+              }}
             >
-              Book Free Consultation
+              Book Consultation
             </Button>
           </form>
         </div>

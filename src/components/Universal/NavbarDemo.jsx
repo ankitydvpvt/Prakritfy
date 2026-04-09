@@ -47,7 +47,7 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} className="text-white font-bold text-lg" />
           <NavbarButton className="text-white" onClick={book} variant="primary">
-            Book a call
+            Book a Consultant
           </NavbarButton>
         </NavBody>
 
@@ -62,7 +62,7 @@ export function NavbarDemo() {
           </MobileNavHeader>
 
           <MobileNavMenu
-            className="bg-[#71d2ba]/50 "
+            className="bg-[#00BFFF]/50 "
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >

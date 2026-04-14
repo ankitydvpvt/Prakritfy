@@ -1,6 +1,8 @@
 "use client";
 import { NavbarDemo } from "@/components/Universal/NavbarDemo";
 import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   FaPhone,
   FaEnvelope,
@@ -47,11 +49,11 @@ export default function PremiumContactPage() {
     phone: "",
     address: "",
     consultationType: "general",
-    preferredDate: "",
     preferredTime: "",
     message: "",
   });
 
+  const [selectedDate, setSelectedDate] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -71,10 +73,10 @@ export default function PremiumContactPage() {
       phone: "",
       address: "",
       consultationType: "general",
-      preferredDate: "",
       preferredTime: "",
       message: "",
     });
+    setSelectedDate(null);
 
     setTimeout(() => setIsSubmitted(false), 4000);
     setIsSubmitting(false);
@@ -84,7 +86,7 @@ export default function PremiumContactPage() {
     <div className="min-h-screen bg-gradient-to-r from-[#061411] via-[#0b2620] to-[#4fb9a0] text-white">
       <NavbarDemo />
       {/* HEADER */}
-      <section className="text-center py-20 px-4">
+      <section className="text-center py-20 px-4 pt-8 md:pt-20">
         <div className="text-5xl md:text-6xl font-semibold tracking-tight bg-gradient-to-r from-slate-100 to-cyan-200 bg-clip-text text-transparent">
           Contact Our Care Team
         </div>
@@ -176,22 +178,25 @@ export default function PremiumContactPage() {
   </div>
 
   {/* Date + Time */}
-  <div className="grid grid-cols-2 gap-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
     
     {/* Date */}
     <div>
       <label className="flex items-center gap-2 mb-3.5 font-semibold text-white">
         <FaCalendarAlt /> Preferred Date
       </label>
-      <input
-        type="date"
-        name="preferredDate"
-        value={formData.preferredDate}
-        onChange={handleChange}
-        min={new Date().toISOString().split("T")[0]}
+      <DatePicker
+        selected={selectedDate}
+        onChange={(date) => setSelectedDate(date)}
+        minDate={new Date()}
+        dateFormat="dd-MM-yyyy"
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+        withPortal
+        placeholderText="Select date"
         className="w-full py-3 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-200 leading-relaxed min-h-12"
         style={{ 
-          colorScheme: 'light',
           color: '#000000',
           paddingLeft: '16px',
           paddingRight: '16px',

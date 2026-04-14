@@ -9,19 +9,16 @@ import {
   NavbarButton,
   MobileNavHeader,
   MobileNavToggle,
-  MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 
 import { useState } from "react";
-import { Button, Textarea } from "@chakra-ui/react";
 import Form from "../home/Form";
+
 export function NavbarDemo() {
   const navItems = [
     { name: "Home", link: "/" },
     { name: "About", link: "/about" },
     { name: "Contact", link: "/contact" },
-    // { name: "Product", link: "/product" },
-
     { name: "Patient Inquiry", link: "/patient-conditions-inquiry" },
   ];
 
@@ -32,26 +29,24 @@ export function NavbarDemo() {
     setOpen(true);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    alert("Form submitted successfully!");
-    setOpen(false);
-  }
-
   return (
     <div className="relative w-full">
-      {/* ================= NAVBAR ================= */}
+      {/* NAVBAR */}
       <Navbar>
-        {/* Desktop Navigation */}
+        {/* Desktop */}
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} className="text-white font-bold text-lg" />
-          <NavbarButton onClick={book} variant="primary" className="!bg-yellow-400 !text-black">
+          <NavbarButton
+            onClick={book}
+            variant="primary"
+            className="!bg-yellow-400 !text-black"
+          >
             Book a Consultant
           </NavbarButton>
         </NavBody>
 
-        {/* Mobile Navigation */}
+        {/* MOBILE */}
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -61,41 +56,43 @@ export function NavbarDemo() {
             />
           </MobileNavHeader>
 
-          <MobileNavMenu
-            className="bg-gradient-to-b from-[#061411] via-[#0b2620] to-[#0f3d2e] backdrop-blur-sm"
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            <div className="px-4 py-6 space-y-3">
-              {navItems.map((item, idx) => (
-                <a
-                  key={idx}
-                  href={item.link}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-6 py-4 text-center font-bold text-base text-slate-100 bg-gradient-to-r from-[#4fb9a0] to-[#35b6b4] rounded-xl shadow-lg hover:shadow-xl hover:from-[#5cc9af] hover:to-[#45c6c4] transition-all duration-300 hover:scale-105 active:scale-95 border border-[#4fb9a0]/30"
-                >
-                  {item.name}
-                </a>
-              ))}
+          {/* ✅ COMPACT FULL-WIDTH MENU */}
+          {isMobileMenuOpen && (
+            <div className="fixed left-0 right-0 top-16 w-screen bg-white z-50 shadow-lg">
+              
+              {/* Menu Items */}
+              <div className="flex flex-col">
+                {navItems.map((item, idx) => (
+                  <a
+                    key={idx}
+                    href={item.link}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="!px-4 !py-3 !text-gray-900 !text-sm !font-semibold hover:bg-gray-100"
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
 
-              <div className="pt-4 mt-4 border-t border-[#4fb9a0]/20">
-                <NavbarButton
-                  variant="primary"
-                  className="w-full !bg-yellow-400 !text-slate-900 !font-bold hover:bg-yellow-300 transition-all duration-300 shadow-lg hover:shadow-xl"
+              {/* Button */}
+              <div className="px-4 py-4">
+                <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     setOpen(true);
                   }}
+                  className="w-full !bg-yellow-400 !text-black !font-bold !py-3 !rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300"
                 >
-                  Book a Consultation
-                </NavbarButton>
+                  Book a Consultant
+                </button>
               </div>
+
             </div>
-          </MobileNavMenu>
+          )}
         </MobileNav>
       </Navbar>
 
-      {/* ================= POPUP FORM ================= */}
+      {/* FORM */}
       <Form open={open} setOpen={setOpen} />
     </div>
   );

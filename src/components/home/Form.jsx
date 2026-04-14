@@ -1,6 +1,8 @@
 "use client";
 import { Portal, Button } from "@chakra-ui/react";
 import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   FaPhone,
   FaUser,
@@ -23,6 +25,7 @@ export default function Form({ open, setOpen }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +50,7 @@ export default function Form({ open, setOpen }) {
       await addDoc(bookingsCollection, {
         fullName: formData.name,
         phoneNumber: formData.phone,
-        preferredDate: formData.preferredDate,
+        preferredDate: selectedDate ? selectedDate.toISOString().split("T")[0] : "",
         preferredTime: formData.preferredTime,
         notes: formData.message,
         submittedAt: serverTimestamp(),
@@ -62,6 +65,7 @@ export default function Form({ open, setOpen }) {
         preferredTime: "",
         message: "",
       });
+      setSelectedDate(null);
 
       setTimeout(() => setIsSubmitted(false), 4000);
     } catch (error) {
@@ -181,23 +185,34 @@ export default function Form({ open, setOpen }) {
                 <label className="flex items-center gap-2 mb-2 font-semibold text-white text-sm">
                   <FaCalendarAlt className="text-cyan-400 text-xs" /> Date
                 </label>
-                <input
-                  type="date"
-                  name="preferredDate"
-                  value={formData.preferredDate}
-                  onChange={handleChange}
-                  min={new Date().toISOString().split("T")[0]}
-                  className="w-full py-3 bg-white text-black text-sm sm:text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
-                  style={{
-                    colorScheme: 'light',
-                    color: '#000000',
-                    paddingLeft: '12px',
-                    paddingRight: '12px',
-                    minHeight: '50px',
-                    fontSize: '16px',
-                    letterSpacing: '0.5px',
-                  }}
-                />
+                <div className="relative">
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                    minDate={new Date()}
+                    dateFormat="dd-MM-yyyy"
+                    placeholderText="dd-mm-yyyy"
+                    withPortal
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    wrapperClassName="w-full"
+                    shouldCloseOnSelect
+                    calendarClassName="react-datepicker-custom"
+                    className="w-full py-3 bg-white !text-black text-sm sm:text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                    style={{
+                      color: '#000000 !important',
+                      paddingLeft: '12px',
+                      paddingRight: '40px',
+                      minHeight: '50px',
+                      fontSize: '16px',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      backgroundColor: '#ffffff',
+                    }}
+                  />
+                  <FaCalendarAlt className="absolute right-3 top-1/2 transform -translate-y-1/2 text-cyan-400 pointer-events-none" />
+                </div>
               </div>
 
               {/* Time */}

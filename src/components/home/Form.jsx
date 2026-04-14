@@ -104,7 +104,7 @@ export default function Form({ open, setOpen }) {
       {/* Form */}
       <Portal>
         <div
-          className="fixed bottom-4 right-4 w-[90%] sm:w-96 rounded-xl p-6 shadow-2xl text-white"
+          className="fixed bottom-4 right-4 w-[95%] sm:w-[90%] md:w-96 rounded-xl p-4 sm:p-6 shadow-2xl text-white max-h-[90vh] overflow-y-auto"
           style={{
             zIndex: 2999,
             background: "linear-gradient(135deg, rgba(2,106,162,0.95), rgba(0,40,80,0.95))",
@@ -175,7 +175,7 @@ export default function Form({ open, setOpen }) {
             </div>
 
             {/* Date + Time */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 w-full">
               {/* Date */}
               <div>
                 <label className="flex items-center gap-2 mb-2 font-semibold text-white text-sm">
@@ -187,7 +187,7 @@ export default function Form({ open, setOpen }) {
                   value={formData.preferredDate}
                   onChange={handleChange}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full py-2.5 sm:py-3 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                  className="w-full py-2.5 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
                   style={{
                     colorScheme: 'light',
                     color: '#000000',
@@ -207,7 +207,7 @@ export default function Form({ open, setOpen }) {
                   name="preferredTime"
                   value={formData.preferredTime}
                   onChange={handleChange}
-                  className="w-full py-2.5 sm:py-3 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all appearance-none cursor-pointer"
+                  className="w-full py-2.5 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all appearance-none cursor-pointer"
                   style={{
                     color: '#000000',
                     paddingLeft: '16px',

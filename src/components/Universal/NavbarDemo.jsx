@@ -62,34 +62,34 @@ export function NavbarDemo() {
           </MobileNavHeader>
 
           <MobileNavMenu
-            className="bg-[#00BFFF]/50 "
+            className="bg-gradient-to-b from-[#061411] via-[#0b2620] to-[#0f3d2e] backdrop-blur-sm"
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >
-            {navItems.map((item, idx) => (
-              <div className="text-black text-center rounded-4xl hover:font-bold transition-transform duration-300 hover:scale-105  hover:bg-white  w-30">
+            <div className="px-4 py-6 space-y-3">
+              {navItems.map((item, idx) => (
                 <a
                   key={idx}
                   href={item.link}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className=" text-black-700 dark:text-black"
+                  className="block px-6 py-4 text-center font-bold text-base text-slate-100 bg-gradient-to-r from-[#4fb9a0] to-[#35b6b4] rounded-xl shadow-lg hover:shadow-xl hover:from-[#5cc9af] hover:to-[#45c6c4] transition-all duration-300 hover:scale-105 active:scale-95 border border-[#4fb9a0]/30"
                 >
                   {item.name}
                 </a>
-              </div>
-            ))}
+              ))}
 
-            <div className="flex flex-col gap-4 mt-4 hover:bg-white text-black rounded-lg">
-              <NavbarButton
-                variant="primary"
-                className="w-full !bg-yellow-400 !text-black"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setOpen(true);
-                }}
-              >
-                Book a call
-              </NavbarButton>
+              <div className="pt-4 mt-4 border-t border-[#4fb9a0]/20">
+                <NavbarButton
+                  variant="primary"
+                  className="w-full !bg-yellow-400 !text-slate-900 !font-bold hover:bg-yellow-300 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setOpen(true);
+                  }}
+                >
+                  Book a Consultation
+                </NavbarButton>
+              </div>
             </div>
           </MobileNavMenu>
         </MobileNav>

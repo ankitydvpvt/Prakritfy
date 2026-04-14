@@ -151,8 +151,8 @@ export default function Form({ open, setOpen }) {
                 onChange={handleChange}
                 placeholder="Enter your full name"
                 required
-                className="w-full py-12 bg-white text-black text-base border border-gray-300 rounded-lg placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
-                style={{ paddingLeft: '16px', paddingRight: '16px', color: '#000000', minHeight: '60px' }}
+                className="w-full py-2.5 sm:py-3 bg-white text-black text-base border border-gray-300 rounded-lg placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                style={{ paddingLeft: '16px', paddingRight: '16px', color: '#000000', minHeight: '50px' }}
               />
             </div>
 
@@ -169,13 +169,13 @@ export default function Form({ open, setOpen }) {
                 placeholder="10-digit number"
                 required
                 maxLength={10}
-                className="w-full py-12 bg-white text-black text-base border border-gray-300 rounded-lg placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
-                style={{ paddingLeft: '16px', paddingRight: '16px', color: '#000000', minHeight: '60px' }}
+                className="w-full py-2.5 sm:py-3 bg-white text-black text-base border border-gray-300 rounded-lg placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                style={{ paddingLeft: '16px', paddingRight: '16px', color: '#000000', minHeight: '50px' }}
               />
             </div>
 
             {/* Date + Time */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Date */}
               <div>
                 <label className="flex items-center gap-2 mb-2 font-semibold text-white text-sm">
@@ -187,13 +187,13 @@ export default function Form({ open, setOpen }) {
                   value={formData.preferredDate}
                   onChange={handleChange}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full py-12 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                  className="w-full py-2.5 sm:py-3 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
                   style={{
                     colorScheme: 'light',
                     color: '#000000',
                     paddingLeft: '16px',
                     paddingRight: '16px',
-                    minHeight: '60px',
+                    minHeight: '50px',
                   }}
                 />
               </div>
@@ -207,12 +207,12 @@ export default function Form({ open, setOpen }) {
                   name="preferredTime"
                   value={formData.preferredTime}
                   onChange={handleChange}
-                  className="w-full py-12 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all appearance-none cursor-pointer"
+                  className="w-full py-2.5 sm:py-3 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all appearance-none cursor-pointer"
                   style={{
                     color: '#000000',
                     paddingLeft: '16px',
                     paddingRight: '16px',
-                    minHeight: '60px',
+                    minHeight: '50px',
                   }}
                 >
                   <option value="">Select Time</option>

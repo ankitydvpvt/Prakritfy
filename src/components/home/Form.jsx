@@ -187,13 +187,15 @@ export default function Form({ open, setOpen }) {
                   value={formData.preferredDate}
                   onChange={handleChange}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full py-2.5 bg-white text-black text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+                  className="w-full py-3 bg-white text-black text-sm sm:text-base border border-gray-300 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
                   style={{
                     colorScheme: 'light',
                     color: '#000000',
-                    paddingLeft: '16px',
-                    paddingRight: '16px',
+                    paddingLeft: '12px',
+                    paddingRight: '12px',
                     minHeight: '50px',
+                    fontSize: '16px',
+                    letterSpacing: '0.5px',
                   }}
                 />
               </div>

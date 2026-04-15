@@ -46,14 +46,14 @@ export default function Form({ open, setOpen }) {
 
     try {
       // Add booking to Firestore
-      const bookingsCollection = collection(db, "consultationBookings");
-      await addDoc(bookingsCollection, {
-        fullName: formData.name,
-        phoneNumber: formData.phone,
-        preferredDate: selectedDate ? selectedDate.toISOString().split("T")[0] : "",
+      const consultationRef = collection(db, "consultationBookings");
+      await addDoc(consultationRef, {
+        name: formData.name,
+        phone: formData.phone,
+        preferredDate: selectedDate ? selectedDate.toISOString() : "",
         preferredTime: formData.preferredTime,
-        notes: formData.message,
-        submittedAt: serverTimestamp(),
+        message: formData.message,
+        timestamp: serverTimestamp(),
         status: "pending"
       });
 

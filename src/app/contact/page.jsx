@@ -15,6 +15,8 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 /* ================= REUSABLE COMPONENTS ================= */
 
@@ -47,8 +49,6 @@ export default function PremiumContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    address: "",
-    consultationType: "general",
     preferredTime: "",
     message: "",
   });
@@ -56,6 +56,7 @@ export default function PremiumContactPage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -64,22 +65,46 @@ export default function PremiumContactPage() {
     e.preventDefault();
     if (isSubmitting) return;
 
+    // Validate that date is selected
+    if (!selectedDate) {
+      setErrorMessage("Please select a preferred date");
+      return;
+    }
+
     setIsSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1500));
+    setErrorMessage("");
 
-    setIsSubmitted(true);
-    setFormData({
-      name: "",
-      phone: "",
-      address: "",
-      consultationType: "general",
-      preferredTime: "",
-      message: "",
-    });
-    setSelectedDate(null);
+    try {
+      // Send data to Firebase Firestore
+      const consultationRef = collection(db, "consultationBookings");
+      await addDoc(consultationRef, {
+        name: formData.name,
+        phone: formData.phone,
+        preferredDate: selectedDate.toISOString(),
+        preferredTime: formData.preferredTime,
+        message: formData.message,
+        timestamp: serverTimestamp(),
+        status: "pending",
+      });
 
-    setTimeout(() => setIsSubmitted(false), 4000);
-    setIsSubmitting(false);
+      // Success - show message
+      setIsSubmitted(true);
+      setFormData({
+        name: "",
+        phone: "",
+        preferredTime: "",
+        message: "",
+      });
+      setSelectedDate(null);
+
+      // Hide success message after 4 seconds
+      setTimeout(() => setIsSubmitted(false), 4000);
+    } catch (error) {
+      console.error("Error submitting consultation:", error);
+      setErrorMessage("Failed to submit consultation. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -138,6 +163,12 @@ export default function PremiumContactPage() {
             <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-400/30 rounded-xl p-4 mb-6">
               <FaCheckCircle className="text-emerald-400 text-xl" />
               <span className="text-gray-900 font-medium">Your request has been submitted successfully.</span>
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="flex items-center gap-3 bg-red-500/10 border border-red-400/30 rounded-xl p-4 mb-6">
+              <span className="text-red-400 font-medium">{errorMessage}</span>
             </div>
           )}
 

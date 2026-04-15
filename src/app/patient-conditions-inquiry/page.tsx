@@ -952,13 +952,15 @@ export default function EmeraldPremiumHealthForm() {
                       Age
                     </label>
                     <input
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       name="age"
                       value={form.age}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        const numericValue = e.target.value.replace(/[^0-9]/g, "").slice(0, 3);
+                        setForm({ ...form, age: numericValue });
+                      }}
                       placeholder="Enter your age"
-                      min={1}
-                      max={120}
                       className="w-full py-10 bg-white text-gray-900 border border-gray-300 rounded text-base placeholder-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/50 transition-all font-medium"
                       style={{ paddingLeft: '16px', paddingRight: '16px', minHeight: '55px' }}
                     />
